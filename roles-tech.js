@@ -35,6 +35,7 @@ const COMMON = {
     coach: "Best practice: schedule a job order intake session and include your perm team and TDC partner. Introduce Perm as an option on every JO, as well as FTEP.",
     questions: [
       { id: "client_company", type: "text", label: "Client company", placeholder: "Acme Corp" },
+      { id: "company_website", type: "text", label: "Company website", placeholder: "https://www.client.com" },
       { id: "client_contact", type: "text", label: "Client contact(s) on the call", placeholder: "Name, title (hiring manager? HR? engineering lead?)" },
       { id: "job_title", type: "text", label: "Exact job title on the req", placeholder: "e.g., Senior Backend Engineer" },
       { id: "why_hiring", type: "textarea", label: "Why are you hiring? What business/technical problem are you trying to solve?",
@@ -113,7 +114,6 @@ const COMMON = {
     title: "Closing Questions",
     subtitle: "Lock in the process before you hang up.",
     questions: [
-      { id: "candidate_start", type: "text", label: "When can the candidate start?", placeholder: "Target onboarding date" },
       { id: "interview_process", type: "textarea", label: "What does the interview process look like?",
         placeholder: "Rounds, interviewers, timeline to decision" },
       { id: "tech_assessment", type: "text", label: "Technical assessment involved?",
@@ -246,10 +246,7 @@ const ROLES = {
         detail: "Target engineers comfortable owning cloud infra and scale. Distributed-systems depth is the filter." }
     ],
     stackCategories: [
-      { id: "lang", label: "Languages / frameworks", placeholder: "Java/Spring, .NET, Python/Django…" },
       { id: "db", label: "Databases", placeholder: "PostgreSQL, MongoDB, Redis…" },
-      { id: "cloud", label: "Cloud", placeholder: "AWS, Azure, GCP…" },
-      { id: "messaging", label: "Messaging / streaming", placeholder: "Kafka, RabbitMQ, SQS…" },
       { id: "cicd", label: "CI/CD & containers", placeholder: "Jenkins, GitHub Actions, Docker, K8s…" },
       { id: "observability", label: "Observability", placeholder: "Datadog, Prometheus, Grafana…" }
     ],
@@ -351,12 +348,9 @@ const ROLES = {
         detail: "Target cloud-native data engineers. Pipeline reliability and the cloud data stack are the filters." }
     ],
     stackCategories: [
-      { id: "warehouse", label: "Warehouse / lakehouse", placeholder: "Snowflake, BigQuery, Databricks…" },
-      { id: "orchestration", label: "Orchestration", placeholder: "Airflow, dbt, Dagster…" },
       { id: "processing", label: "Processing / compute", placeholder: "Spark, Flink…" },
       { id: "streaming", label: "Streaming", placeholder: "Kafka, Kinesis…" },
       { id: "lang", label: "Languages", placeholder: "Python, SQL, Scala…" },
-      { id: "cloud", label: "Cloud", placeholder: "AWS, Azure, GCP…" }
     ],
     aiUseCases: ["Pipeline / SQL generation", "Data documentation", "Anomaly detection",
                  "Code review", "Data-quality checks", "Schema mapping"],
@@ -467,10 +461,6 @@ const ROLES = {
     ],
     stackCategories: [
       { id: "cloud", label: "Cloud", placeholder: "AWS, Azure, GCP…" },
-      { id: "iac", label: "IaC", placeholder: "Terraform, Pulumi, Ansible…" },
-      { id: "containers", label: "Containers / orchestration", placeholder: "Docker, Kubernetes, Helm…" },
-      { id: "cicd", label: "CI/CD", placeholder: "GitHub Actions, ArgoCD, Jenkins…" },
-      { id: "observability", label: "Observability", placeholder: "Datadog, Prometheus, Grafana…" },
       { id: "scripting", label: "Scripting / languages", placeholder: "Bash, Python, Go…" }
     ],
     aiUseCases: ["Pipeline / IaC generation", "Incident summarization", "Runbook generation",
@@ -574,10 +564,6 @@ const ROLES = {
         detail: "Target applied-ML titles. End-to-end delivery on a cloud ML platform is the filter." }
     ],
     stackCategories: [
-      { id: "lang", label: "Languages", placeholder: "Python, R, SQL…" },
-      { id: "frameworks", label: "ML frameworks", placeholder: "PyTorch, scikit-learn, XGBoost…" },
-      { id: "mlops", label: "MLOps", placeholder: "MLflow, Kubeflow, SageMaker…" },
-      { id: "cloud", label: "Cloud ML platform", placeholder: "SageMaker, Vertex, Azure ML, Databricks…" },
       { id: "data", label: "Data / warehouse", placeholder: "Snowflake, Spark, BigQuery…" },
       { id: "viz", label: "Notebooks / BI", placeholder: "Jupyter, Tableau, Streamlit…" }
     ],
@@ -680,8 +666,6 @@ const ROLES = {
         detail: "Target implementation consultants and BAs. Full-lifecycle implementation experience is the filter." }
     ],
     stackCategories: [
-      { id: "platform", label: "ERP platform / version", placeholder: "SAP S/4HANA, Workday, Dynamics 365…" },
-      { id: "modules", label: "Modules", placeholder: "FICO, MM, HCM…" },
       { id: "integration", label: "Integration / middleware", placeholder: "MuleSoft, Boomi, PI/PO…" },
       { id: "reporting", label: "Reporting / BI", placeholder: "SAP BW, Power BI, BI Publisher…" },
       { id: "dev", label: "Development tools", placeholder: "ABAP, workflow, extensions…" },
@@ -908,9 +892,7 @@ const ROLES = {
         detail: "Target applied-AI engineers who pair strong prompting/eval with app-building. Shipped GenAI features are the filter." }
     ],
     stackCategories: [
-      { id: "providers", label: "LLM providers / frameworks", placeholder: "OpenAI, Anthropic, LangChain, LlamaIndex…" },
       { id: "vectordb", label: "Vector DB / retrieval", placeholder: "Pinecone, pgvector, Weaviate…" },
-      { id: "lang", label: "Languages", placeholder: "Python, TypeScript…" },
       { id: "mlops", label: "LLMOps / serving", placeholder: "LangSmith, Weights & Biases, Bedrock…" },
       { id: "cloud", label: "Cloud / GPU", placeholder: "AWS, Azure, GCP, Modal, Replicate…" },
       { id: "data", label: "Data / backend", placeholder: "Postgres, FastAPI, Redis…" }
@@ -997,8 +979,6 @@ const ROLES = {
         detail: "Target product engineers who own UI plus deployment. Front-end depth and shipping autonomy are the filters." }
     ],
     stackCategories: [
-      { id: "frontend", label: "Front-end", placeholder: "React, TypeScript, Tailwind…" },
-      { id: "backend", label: "Back-end languages", placeholder: "Node, Python, Java, .NET…" },
       { id: "db", label: "Databases", placeholder: "PostgreSQL, MongoDB, Redis…" },
       { id: "cloud", label: "Cloud / DevOps", placeholder: "AWS, Docker, GitHub Actions…" },
       { id: "testing", label: "Testing", placeholder: "Jest, Playwright, Cypress…" },
@@ -1087,8 +1067,6 @@ const ROLES = {
         detail: "Target senior mobile engineers who own performance and release. Store track record is the filter." }
     ],
     stackCategories: [
-      { id: "lang", label: "Languages / frameworks", placeholder: "Swift, Kotlin, React Native, Flutter…" },
-      { id: "cross", label: "Cross-platform", placeholder: "React Native, Flutter…" },
       { id: "backend", label: "Backend / API", placeholder: "REST, GraphQL, Firebase…" },
       { id: "cicd", label: "CI/CD (mobile)", placeholder: "Fastlane, Bitrise, App Center…" },
       { id: "testing", label: "Testing", placeholder: "XCTest, Espresso, Appium…" },
@@ -1286,7 +1264,6 @@ const ROLES = {
         detail: "Target GRC and identity-governance titles. Framework and audit experience are the filters." }
     ],
     stackCategories: [
-      { id: "siem", label: "SIEM / SOAR", placeholder: "Splunk, Sentinel, Chronicle…" },
       { id: "cloud", label: "Cloud security", placeholder: "Wiz, Prisma, CSPM, IAM…" },
       { id: "appsec", label: "AppSec (SAST/DAST)", placeholder: "Snyk, Checkmarx, Burp…" },
       { id: "iam", label: "IAM", placeholder: "Okta, Entra ID, SailPoint…" },
@@ -1378,11 +1355,8 @@ const ROLES = {
         detail: "Target QA analyst/lead titles. Test strategy and quality process are the filters." }
     ],
     stackCategories: [
-      { id: "automation", label: "Automation frameworks", placeholder: "Selenium, Playwright, Cypress…" },
       { id: "management", label: "Test management", placeholder: "TestRail, Zephyr, Xray…" },
-      { id: "apiperf", label: "API / perf tools", placeholder: "Postman, JMeter, k6…" },
       { id: "cicd", label: "CI/CD", placeholder: "Jenkins, GitHub Actions…" },
-      { id: "lang", label: "Languages", placeholder: "Java, JavaScript/TS, Python…" },
       { id: "bugtracking", label: "Bug tracking", placeholder: "Jira, Azure DevOps…" }
     ],
     aiUseCases: ["Test generation", "Test-data generation", "Bug triage", "Documentation", "Log analysis"],
@@ -1481,7 +1455,6 @@ const ROLES = {
         detail: "Target functional consultants named by cloud/module. That exact combo is the filter." }
     ],
     stackCategories: [
-      { id: "platform", label: "CRM platform", placeholder: "Salesforce, Dynamics 365, HubSpot…" },
       { id: "dev", label: "Dev tools", placeholder: "Apex, LWC, C# plugins…" },
       { id: "integration", label: "Integration", placeholder: "MuleSoft, Boomi, REST APIs…" },
       { id: "reporting", label: "Reporting / BI", placeholder: "CRM Analytics, Power BI, Tableau…" },

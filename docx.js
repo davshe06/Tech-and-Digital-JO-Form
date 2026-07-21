@@ -101,10 +101,14 @@ function docxHeading(text, style) {
     "<w:r><w:t xml:space=\"preserve\">" + docxXmlEsc(text) + "</w:t></w:r></w:p>";
 }
 
-function docxLabelValue(label, value) {
+function docxLabelValue(label, value, rid) {
+  const valueRun = rid
+    ? '<w:hyperlink r:id="' + rid + '"><w:r><w:rPr><w:rStyle w:val="Hyperlink"/></w:rPr>' +
+      docxRunContent(value) + "</w:r></w:hyperlink>"
+    : "<w:r>" + docxRunContent(value) + "</w:r>";
   return "<w:p>" +
     '<w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">' + docxXmlEsc(label) + ": </w:t></w:r>" +
-    "<w:r>" + docxRunContent(value) + "</w:r>" +
+    valueRun +
     "</w:p>";
 }
 
@@ -131,11 +135,19 @@ const DOCX_ROOT_RELS =
   '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
   "</Relationships>";
 
-const DOCX_DOC_RELS =
-  '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-  '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
-  '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
-  "</Relationships>";
+/* Document rels: styles + one external-hyperlink rel per link (rId2+). */
+function docxDocRels(links) {
+  let rels =
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>';
+  links.forEach((href, i) => {
+    rels += '<Relationship Id="rId' + (i + 2) +
+      '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="' +
+      docxXmlEsc(href) + '" TargetMode="External"/>';
+  });
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+    rels + "</Relationships>";
+}
 
 const DOCX_STYLES =
   '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
@@ -151,10 +163,16 @@ const DOCX_STYLES =
   '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/>' +
   '<w:pPr><w:spacing w:before="280" w:after="80"/></w:pPr>' +
   '<w:rPr><w:b/><w:color w:val="2456D6"/><w:sz w:val="26"/><w:szCs w:val="26"/></w:rPr></w:style>' +
+  '<w:style w:type="character" w:styleId="Hyperlink"><w:name w:val="Hyperlink"/>' +
+  '<w:rPr><w:color w:val="2456D6"/><w:u w:val="single"/></w:rPr></w:style>' +
   "</w:styles>";
 
-/* sections: [{ title, lines: [{ label, value }] }] */
+/* sections: [{ title, lines: [{ label, value, href? }] }] — lines with an
+   href become real clickable hyperlinks in the document. */
 function buildJobOrderDocx(title, dateStr, sections) {
+  const links = [];   /* hrefs in rId order; rels start at rId2 */
+  const linkRid = href => { links.push(href); return "rId" + (links.length + 1); };
+
   let body = docxHeading("Job Order: " + title, "Title");
   body += docxSubtle("Intake completed " + dateStr);
 
@@ -170,12 +188,15 @@ function buildJobOrderDocx(title, dateStr, sections) {
       });
       return;
     }
-    (sec.lines || []).forEach(l => { body += docxLabelValue(l.label, l.value); });
+    (sec.lines || []).forEach(l => {
+      body += docxLabelValue(l.label, l.value, l.href ? linkRid(l.href) : null);
+    });
   });
 
   const documentXml =
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-    '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+    '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"' +
+    ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
     "<w:body>" + body +
     '<w:sectPr><w:pgSz w:w="12240" w:h="15840"/>' +
     '<w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"/>' +
@@ -185,7 +206,7 @@ function buildJobOrderDocx(title, dateStr, sections) {
     { name: "[Content_Types].xml", data: DOCX_CONTENT_TYPES },
     { name: "_rels/.rels", data: DOCX_ROOT_RELS },
     { name: "word/document.xml", data: documentXml },
-    { name: "word/_rels/document.xml.rels", data: DOCX_DOC_RELS },
+    { name: "word/_rels/document.xml.rels", data: docxDocRels(links) },
     { name: "word/styles.xml", data: DOCX_STYLES }
   ]);
 }

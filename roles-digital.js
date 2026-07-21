@@ -32,6 +32,7 @@ const COMMON = {
     coach: "Best practice: schedule a job order intake session and include your perm team and TDC partner. Introduce Perm as an option on every JO, as well as FTEP.",
     questions: [
       { id: "client_company", type: "text", label: "Client company", placeholder: "Acme Corp" },
+      { id: "company_website", type: "text", label: "Company website", placeholder: "https://www.client.com" },
       { id: "client_contact", type: "text", label: "Client contact(s) on the call", placeholder: "Name, title" },
       { id: "job_title", type: "text", label: "Exact job title on the req", placeholder: "e.g., Senior UX Designer" },
       { id: "why_hiring", type: "textarea", label: "Why are you hiring? What business problem are you trying to solve?",
@@ -108,7 +109,6 @@ const COMMON = {
     title: "Closing Questions",
     subtitle: "Lock in the process before you hang up.",
     questions: [
-      { id: "candidate_start", type: "text", label: "When can the candidate start?", placeholder: "Target onboarding date" },
       { id: "interview_process", type: "textarea", label: "What does the interview process look like?",
         placeholder: "Rounds, interviewers, assessments, timeline to decision" },
       { id: "portfolio_or_test", type: "text", label: "Portfolio, code test, or assignment required?",
@@ -268,11 +268,7 @@ const ROLES = {
         detail: "Target content-marketing titles with SEO chops. Writing samples and organic-traffic wins are the screening filters." }
     ],
     stackCategories: [
-      { id: "automation", label: "Marketing automation", placeholder: "HubSpot, Marketo…" },
       { id: "crm", label: "CRM", placeholder: "Salesforce, HubSpot CRM…" },
-      { id: "analytics", label: "Analytics", placeholder: "GA4, Tableau…" },
-      { id: "cms", label: "CMS", placeholder: "WordPress, Shopify…" },
-      { id: "ads", label: "Ad platforms", placeholder: "Google Ads, Meta…" },
       { id: "creative", label: "Creative", placeholder: "Figma, Adobe CC, Canva…" }
     ],
     aiUseCases: ["Content creation", "Email drafting", "SEO optimization", "Paid ad optimization",
@@ -385,9 +381,7 @@ const ROLES = {
         detail: "Target designers who've built or owned a system. Component libraries, tokens, and governance are the filters." }
     ],
     stackCategories: [
-      { id: "design", label: "Design tools", placeholder: "Figma, Sketch, Adobe XD" },
       { id: "prototyping", label: "Prototyping", placeholder: "Figma, Framer, ProtoPie" },
-      { id: "research", label: "Research / testing", placeholder: "Dovetail, UserTesting, Maze" },
       { id: "handoff", label: "Handoff / dev", placeholder: "Figma Dev Mode, Zeplin, Storybook" },
       { id: "analytics", label: "Product analytics", placeholder: "Amplitude, Hotjar, FullStory" },
       { id: "collab", label: "Collaboration", placeholder: "FigJam, Miro, Notion" }
@@ -485,9 +479,6 @@ const ROLES = {
         detail: "Target ops-analyst titles. Attribution modeling and BI fluency are the filters." }
     ],
     stackCategories: [
-      { id: "automation", label: "Marketing automation platform", placeholder: "HubSpot, Marketo, Pardot…" },
-      { id: "crm", label: "CRM", placeholder: "Salesforce, Dynamics…" },
-      { id: "analytics", label: "Analytics / BI", placeholder: "GA4, Tableau, Power BI…" },
       { id: "data", label: "Data / CDP", placeholder: "Segment, Snowflake, ZoomInfo…" },
       { id: "web", label: "CMS / landing pages", placeholder: "WordPress, Unbounce…" },
       { id: "ads", label: "Ad platforms", placeholder: "Google Ads, LinkedIn…" }
@@ -586,7 +577,6 @@ const ROLES = {
         detail: "Target program manager titles. Multi-workstream and vendor governance are the filters." }
     ],
     stackCategories: [
-      { id: "pm", label: "PM / ticketing", placeholder: "Jira, Asana, Monday…" },
       { id: "roadmap", label: "Roadmapping", placeholder: "Aha!, Productboard, Roadmunk…" },
       { id: "docs", label: "Docs / collaboration", placeholder: "Confluence, Notion, Google Workspace…" },
       { id: "design", label: "Design / handoff", placeholder: "Figma, Miro…" },
@@ -708,10 +698,6 @@ const ROLES = {
         detail: "Target devs comfortable across the API boundary. SSR, BFF, and backend collaboration are the filters." }
     ],
     stackCategories: [
-      { id: "lang", label: "Languages / frameworks", placeholder: "React, TypeScript, Next.js…" },
-      { id: "styling", label: "Styling", placeholder: "Tailwind, SCSS, styled-components…" },
-      { id: "build", label: "Build / bundlers", placeholder: "Vite, Webpack, Turborepo…" },
-      { id: "testing", label: "Testing", placeholder: "Jest, Cypress, Playwright…" },
       { id: "ci", label: "Version control / CI", placeholder: "GitHub Actions, GitLab CI…" },
       { id: "hosting", label: "Hosting / cloud", placeholder: "Vercel, Netlify, AWS…" }
     ],
@@ -842,10 +828,6 @@ const ROLES = {
         detail: "Target art directors who've adopted AI. Style ownership and brand consistency are the filters." }
     ],
     stackCategories: [
-      { id: "gen", label: "Generation tools", placeholder: "Midjourney, Stable Diffusion, Flux…" },
-      { id: "video", label: "AI video / motion", placeholder: "Runway, Sora, Pika…" },
-      { id: "edit", label: "Editing / post", placeholder: "Photoshop, After Effects…" },
-      { id: "threed", label: "3D / assets", placeholder: "Blender, Meshy, Spline…" },
       { id: "workflow", label: "Workflow / pipeline", placeholder: "ComfyUI, Automatic1111, APIs…" },
       { id: "collab", label: "Collaboration / DAM", placeholder: "Figma, Frame.io, Notion…" }
     ],
@@ -955,11 +937,7 @@ const ROLES = {
         detail: "Target fast builders who wire APIs and LLMs into working demos. A portfolio of live projects is the filter." }
     ],
     stackCategories: [
-      { id: "aitools", label: "AI coding tools", placeholder: "Cursor, Claude Code, v0…" },
-      { id: "frontend", label: "Front-end", placeholder: "React, Next.js, Tailwind…" },
-      { id: "backend", label: "Back-end / data", placeholder: "Node, Supabase, Postgres…" },
       { id: "ai", label: "AI / LLM APIs", placeholder: "Anthropic, OpenAI, LangChain…" },
-      { id: "deploy", label: "Deploy / hosting", placeholder: "Vercel, Netlify, Cloudflare…" },
       { id: "automation", label: "Automation / glue", placeholder: "Zapier, n8n, Make…" }
     ],
     aiUseCases: ["Building the app itself", "Prototyping features", "Debugging", "Refactoring",
@@ -1069,12 +1047,7 @@ const ROLES = {
         detail: "Target Dialogflow/Rasa/Lex builders. Intent modeling and an optimization track record are the filters." }
     ],
     stackCategories: [
-      { id: "llm", label: "LLM / AI", placeholder: "Claude, GPT, LangChain, LlamaIndex…" },
-      { id: "platform", label: "Bot / NLU platform", placeholder: "Dialogflow, Rasa, Lex…" },
-      { id: "backend", label: "Backend", placeholder: "Python, Node, FastAPI…" },
-      { id: "channels", label: "Channels", placeholder: "Web, WhatsApp, Twilio, Slack…" },
       { id: "data", label: "Data / vector store", placeholder: "Pinecone, pgvector, Elastic…" },
-      { id: "analytics", label: "Analytics", placeholder: "Botanalytics, Dashbot, GA…" }
     ],
     aiUseCases: ["The bot itself (core product)", "Intent generation", "Response drafting", "Test conversation generation",
                  "Summarizing transcripts", "Knowledge-base retrieval", "Sentiment analysis"],
@@ -1182,12 +1155,7 @@ const ROLES = {
         detail: "Target XR generalists who both build and model. Shipped end-to-end experiences are the filter." }
     ],
     stackCategories: [
-      { id: "engine", label: "Engine", placeholder: "Unity, Unreal, WebXR…" },
-      { id: "lang", label: "Languages", placeholder: "C#, C++, Swift, JS…" },
       { id: "sdk", label: "XR SDKs", placeholder: "OpenXR, ARKit, ARCore, MRTK…" },
-      { id: "threed", label: "3D / assets", placeholder: "Blender, Maya, Substance…" },
-      { id: "proto", label: "Prototyping", placeholder: "ShapesXR, Gravity Sketch…" },
-      { id: "devices", label: "Target devices", placeholder: "Quest, Vision Pro, HoloLens…" }
     ],
     aiUseCases: ["3D asset generation", "Code generation", "Environment / scene generation",
                  "NPC / interaction logic", "Texture generation", "Prototyping"],

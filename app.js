@@ -747,18 +747,25 @@ function renderDeepDivesStep(main) {
 
 /* ---------- review + export ---------- */
 
-function answerLine(label, value) {
+function answerLine(label, value, id) {
   if (value == null) return null;
-  if (Array.isArray(value)) return value.length ? { label, value: value.join(", ") } : null;
+  if (Array.isArray(value)) return value.length ? { label, value: value.join(", "), id } : null;
   const v = String(value).trim();
-  return v ? { label, value: v } : null;
+  return v ? { label, value: v, id } : null;
+}
+
+/* Make a bare domain clickable — exports render hrefs as real hyperlinks. */
+function normalizeUrl(v) {
+  const s = String(v).trim();
+  if (!s) return null;
+  return /^https?:\/\//i.test(s) ? s : "https://" + s;
 }
 
 function collectConfigSection(def) {
   const lines = [];
   def.questions.forEach(q => {
     if (q.showIf && !q.showIf(def.answers, state)) return;
-    const line = answerLine(q.label, def.answers[q.id]);
+    const line = answerLine(q.label, def.answers[q.id], q.id);
     if (line) lines.push(line);
   });
   return lines.length ? { title: def.title, lines } : null;
@@ -773,8 +780,11 @@ function collectSummary() {
   if (role) basicsLines.push({ label: "Role type", value: role.label });
   activeForm().common.basics.questions.forEach(q => {
     if (q.showIf && !q.showIf(state.common.basics, state)) return;
-    const line = answerLine(q.label, state.common.basics[q.id]);
-    if (line) basicsLines.push(line);
+    const line = answerLine(q.label, state.common.basics[q.id], q.id);
+    if (line) {
+      if (q.id === "company_website") line.href = normalizeUrl(line.value);
+      basicsLines.push(line);
+    }
   });
   if (basicsLines.length) sections.push({ title: "Role & Basic Information", lines: basicsLines });
 
@@ -792,7 +802,7 @@ function collectSummary() {
         value: (rs.areas[a.id].pct || 0) + "% (" + (rs.areas[a.id].priority === "must" ? "must have" : "nice to have") + ")"
       }));
       const profile = computeProfile();
-      if (profile) lines.push({ label: "Recruiter targeting profile", value: profile.profile + " — " + profile.detail });
+      if (profile) lines.push({ label: "Recruiter targeting profile", value: profile.profile + " — " + profile.detail, id: "recruiter_profile" });
       sections.push({ title: "Focus Areas & % of Time", lines });
     }
     /* Deep dives */
@@ -803,7 +813,7 @@ function collectSummary() {
       const lines = [];
       area.deepDive.questions.forEach(q => {
         if (q.showIf && !q.showIf(answers, state)) return;
-        const line = answerLine(q.label, answers[q.id]);
+        const line = answerLine(q.label, answers[q.id], q.id);
         if (line) lines.push(line);
       });
       if (lines.length) sections.push({
@@ -847,14 +857,43 @@ function downloadBlob(blob, filename) {
 }
 
 function printSummary() {
-  const title = jobTitleLine();
-  const sections = collectSummary();
+  printDoc(jobTitleLine(), "Intake completed " + new Date().toLocaleDateString(), collectSummary());
+}
+
+/* Candidate-facing export: strips commercial terms and internal intel so
+   the doc is safe to share with a candidate. Excluded question ids +
+   internal-only sections are listed here — adjust as needed. */
+const CANDIDATE_EXCLUDE_IDS = new Set([
+  "budget", "conversion_fees", "bill_to",              /* money / commercial terms */
+  "replacement_why", "how_else_filling", "open_how_long", /* internal client intel */
+  "feedback_turnaround", "next_steps",                 /* rep↔client agreements */
+  "recruiter_profile"                                  /* recruiter targeting notes */
+]);
+const CANDIDATE_EXCLUDE_SECTIONS = new Set(["AI Analysis", "Live Notes", "Job Description / Pre-Meeting Info"]);
+
+function collectCandidateSummary() {
+  return collectSummary()
+    .filter(sec => !CANDIDATE_EXCLUDE_SECTIONS.has(sec.title))
+    .map(sec => sec.text ? sec : { title: sec.title, lines: sec.lines.filter(l => !CANDIDATE_EXCLUDE_IDS.has(l.id)) })
+    .filter(sec => sec.text || sec.lines.length);
+}
+
+function printCandidateBrief() {
+  printDoc(jobTitleLine(), "Candidate brief — prepared " + new Date().toLocaleDateString(), collectCandidateSummary());
+}
+
+function printDoc(title, subtitle, sections) {
   let rows = "";
   sections.forEach(sec => {
     rows += "<h2>" + esc(sec.title) + "</h2>";
     if (sec.text) { rows += "<p class='note'>" + esc(sec.text).replace(/\n/g, "<br>") + "</p>"; return; }
     rows += "<dl>";
-    sec.lines.forEach(l => { rows += "<dt>" + esc(l.label) + "</dt><dd>" + esc(l.value).replace(/\n/g, "<br>") + "</dd>"; });
+    sec.lines.forEach(l => {
+      const val = l.href
+        ? '<a href="' + esc(l.href) + '">' + esc(l.value) + "</a>"
+        : esc(l.value).replace(/\n/g, "<br>");
+      rows += "<dt>" + esc(l.label) + "</dt><dd>" + val + "</dd>";
+    });
     rows += "</dl>";
   });
   if (!sections.length) rows = "<p>No details captured yet.</p>";
@@ -866,9 +905,10 @@ function printSummary() {
     "h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:#2456d6;border-bottom:1px solid #e2e7f0;padding-bottom:5px;margin:22px 0 8px}" +
     "dl{margin:0;display:grid;grid-template-columns:240px 1fr;gap:5px 16px}" +
     "dt{font-weight:600;color:#5b6577;font-size:13.5px}dd{margin:0;font-size:13.5px}" +
+    "a{color:#2456d6}" +
     "p.note{white-space:pre-wrap;font-size:13.5px;margin:0}" +
     "@page{margin:18mm}</style></head><body>" +
-    "<h1>" + esc(title) + "</h1><p class='date'>Intake completed " + esc(new Date().toLocaleDateString()) + "</p>" +
+    "<h1>" + esc(title) + "</h1><p class='date'>" + esc(subtitle) + "</p>" +
     rows + "</body></html>";
 
   const w = window.open("", "_blank");
@@ -1058,7 +1098,10 @@ function renderReviewStep(main) {
   });
   const printBtn = el("button", "btn", "🖨️ Save as PDF");
   printBtn.addEventListener("click", printSummary);
-  actions.appendChild(copyBtn); actions.appendChild(wordBtn); actions.appendChild(printBtn);
+  const candBtn = el("button", "btn", "👤 Candidate PDF");
+  candBtn.title = "Candidate-safe version — no bill rate, fees, or internal notes";
+  candBtn.addEventListener("click", printCandidateBrief);
+  actions.appendChild(copyBtn); actions.appendChild(wordBtn); actions.appendChild(printBtn); actions.appendChild(candBtn);
   main.appendChild(actions);
 
   renderAiSection(main);
@@ -1071,7 +1114,12 @@ function renderReviewStep(main) {
     summary.appendChild(el("h4", null, esc(sec.title)));
     if (sec.text) { summary.appendChild(el("div", "summary-note", esc(sec.text))); return; }
     const dl = el("dl");
-    sec.lines.forEach(l => { dl.appendChild(el("dt", null, esc(l.label))); dl.appendChild(el("dd", null, esc(l.value))); });
+    sec.lines.forEach(l => {
+      dl.appendChild(el("dt", null, esc(l.label)));
+      dl.appendChild(el("dd", null, l.href
+        ? '<a href="' + esc(l.href) + '" target="_blank" rel="noopener">' + esc(l.value) + "</a>"
+        : esc(l.value)));
+    });
     summary.appendChild(dl);
   });
   main.appendChild(summary);
@@ -1082,7 +1130,9 @@ function summaryMarkdown() {
   collectSummary().forEach(sec => {
     md += "\n## " + sec.title + "\n\n";
     if (sec.text) { md += sec.text + "\n"; return; }
-    sec.lines.forEach(l => { md += "- **" + l.label + ":** " + l.value + "\n"; });
+    sec.lines.forEach(l => {
+      md += "- **" + l.label + ":** " + (l.href ? "[" + l.value + "](" + l.href + ")" : l.value) + "\n";
+    });
   });
   return md;
 }
