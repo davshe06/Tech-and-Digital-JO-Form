@@ -252,6 +252,12 @@ h2 { margin: 0 0 6px; font-size: 26px; }
 /* sub-section heading inside a step (e.g. Tools & Platforms under Tech Stack) */
 h3.subhead { margin: 34px 0 6px; font-size: 19px; padding-top: 18px; border-top: 1px solid var(--line); }
 
+/* ranked short-answer list (e.g. Top 3 must-haves) */
+.textlist { display: flex; flex-direction: column; gap: 8px; }
+.textlist-row { display: flex; align-items: center; gap: 10px; }
+.textlist-num { font-weight: 700; color: var(--accent); min-width: 18px; text-align: right; }
+.textlist-row input { flex: 1; }
+
 .coach {
   background: var(--accent-soft);
   border: 1px solid var(--tip-line);

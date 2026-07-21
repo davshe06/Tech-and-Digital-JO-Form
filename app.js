@@ -192,11 +192,11 @@ function areaPriority(s, areaId) {
 function wizardSteps() {
   return [
     { kind: "basics" },
-    { kind: "config", key: "logistics" },
     { kind: "config", key: "team" },
     { kind: "allocator" },
     { kind: "deepdives" },   /* combined focus-area drill-downs + tools ("Tech Stack") */
     { kind: "config", key: "success" },
+    { kind: "config", key: "logistics" },
     { kind: "config", key: "closing" },
     { kind: "review" }
   ];
@@ -306,6 +306,8 @@ function configStepDef(key) {
     return {
       title: "Success & Ideal Candidate", subtitle: "How will this person be measured, and who fits?",
       questions: [
+        { id: "top3", type: "textlist", count: 3, label: "What are the Top 3 things the candidate needs to have?",
+          placeholder: "Short answer — one must-have per line" },
         { id: "metrics", type: "chips", label: "How will this person be measured?", options: role.metrics },
         { id: "success_6_12", type: "textarea", label: "What does success look like after 6–12 months?",
           placeholder: "Concrete outcomes the client will judge this hire on" },
@@ -369,6 +371,23 @@ function renderQuestions(container, questions, answers, scopeId, onChange) {
       ta.value = val || "";
       ta.addEventListener("input", () => { answers[q.id] = ta.value; changed(); });
       wrap.appendChild(ta);
+    } else if (q.type === "textlist") {
+      /* a fixed number of short-answer boxes stored as a ranked array */
+      const count = q.count || 3;
+      if (!Array.isArray(answers[q.id])) answers[q.id] = [];
+      const list = el("div", "textlist");
+      for (let i = 0; i < count; i++) {
+        const row = el("div", "textlist-row");
+        row.appendChild(el("span", "textlist-num", (i + 1) + "."));
+        const input = el("input");
+        input.type = "text";
+        input.placeholder = q.placeholder || "";
+        input.value = answers[q.id][i] || "";
+        input.addEventListener("input", () => { answers[q.id][i] = input.value; changed(); });
+        row.appendChild(input);
+        list.appendChild(row);
+      }
+      wrap.appendChild(list);
     } else if (q.type === "select") {
       const sel = el("select");
       sel.appendChild(el("option", null, "— select —"));
@@ -797,6 +816,12 @@ function collectConfigSection(def) {
   const lines = [];
   def.questions.forEach(q => {
     if (q.showIf && !q.showIf(def.answers, state)) return;
+    /* ranked lists (e.g. Top 3 must-haves) export as a numbered sequence */
+    if (q.type === "textlist") {
+      const items = (def.answers[q.id] || []).map(v => String(v || "").trim()).filter(Boolean);
+      if (items.length) lines.push({ label: q.label, value: items.map((v, i) => (i + 1) + ") " + v).join("  "), id: q.id });
+      return;
+    }
     const line = answerLine(q.label, def.answers[q.id], q.id);
     if (line) lines.push(line);
   });
@@ -820,8 +845,13 @@ function collectSummary() {
   });
   if (basicsLines.length) sections.push({ title: "Role & Basic Information", lines: basicsLines });
 
+  /* Output ordered by what a recruiter needs first: what the role is, what
+     the candidate must have, the deal parameters, then the skill detail,
+     team context, process, and finally the analysis and raw notes. */
+  if (role) {
+    const success = collectConfigSection(configStepDef("success")); if (success) sections.push(success);
+  }
   const logistics = collectConfigSection(configStepDef("logistics")); if (logistics) sections.push(logistics);
-  const team = collectConfigSection(configStepDef("team")); if (team) sections.push(team);
 
   /* Focus areas */
   if (role) {
@@ -852,9 +882,9 @@ function collectSummary() {
         title: area.label + (prio === "must" ? " (must have)" : " (nice to have)"), lines });
     });
     const stack = collectConfigSection(configStepDef("stack")); if (stack) sections.push(stack);
-    const success = collectConfigSection(configStepDef("success")); if (success) sections.push(success);
   }
 
+  const team = collectConfigSection(configStepDef("team")); if (team) sections.push(team);
   const closing = collectConfigSection(configStepDef("closing")); if (closing) sections.push(closing);
 
   /* AI analysis → free-text section */
