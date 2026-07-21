@@ -347,7 +347,7 @@ h2 { margin: 0 0 6px; font-size: 26px; }
   border-radius: 8px;
   padding: 9px 11px;
   resize: vertical;
-  min-height: 190px;
+  min-height: 380px;
 }
 .notes-panel textarea:focus {
   outline: none;
@@ -729,7 +729,7 @@ textarea { resize: vertical; }
     border-left: none;
     border-top: 1px solid var(--line);
   }
-  .notes-panel textarea { min-height: 140px; }
+  .notes-panel textarea { min-height: 280px; }
 }
 
 @media (max-width: 760px) {
