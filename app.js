@@ -247,6 +247,9 @@ function configStepDef(key) {
           options: ["Required", "Preferred", "Not important"] },
         { id: "ai_tools", type: "chips", label: "Which AI tools / skills should they have experience with?",
           options: role.aiTools || [],
+          showIf: a => a.ai_requirement === "Required" || a.ai_requirement === "Preferred" },
+        { id: "ai_expectations", type: "textarea", label: "What should they use AI for in this role?",
+          placeholder: "The outcomes the client expects from AI — speed up delivery, automate reporting, draft content, cut costs…",
           showIf: a => a.ai_requirement === "Required" || a.ai_requirement === "Preferred" }
       ]);
     return {
