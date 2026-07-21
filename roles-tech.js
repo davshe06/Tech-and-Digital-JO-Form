@@ -222,7 +222,6 @@ const ROLES = {
             options: ["AI-assisted coding (Copilot/Cursor)", "Building AI/LLM-powered features", "Integrating AI/ML APIs", "Serving ML models", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "Copilot, LangChain, OpenAI/Anthropic APIs, vector DBs…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("Building AI/LLM-powered features"),
@@ -252,6 +251,7 @@ const ROLES = {
     ],
     aiUseCases: ["Code generation / completion", "Code review", "Test generation", "Debugging",
                  "Documentation", "Refactoring"],
+    aiTools: ["GitHub Copilot","Cursor","Claude Code","OpenAI / Anthropic APIs","LangChain","RAG / vector DBs","Agent frameworks / MCP"],
     metrics: ["Uptime / SLA", "Latency / throughput", "Defect / escape rate", "Deployment frequency",
               "Code coverage", "Incident count", "Sprint velocity", "Cost efficiency"],
     backgrounds: BG_COMMON.concat(["Healthcare", "E-commerce", "Gaming"])
@@ -324,7 +324,6 @@ const ROLES = {
             options: ["AI-assisted pipeline/SQL dev", "Data pipelines for ML/AI", "Vector / embedding stores", "AI-driven data quality", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "Feature stores, embeddings, pgvector, LangChain…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("Vector / embedding stores"),
@@ -354,6 +353,7 @@ const ROLES = {
     ],
     aiUseCases: ["Pipeline / SQL generation", "Data documentation", "Anomaly detection",
                  "Code review", "Data-quality checks", "Schema mapping"],
+    aiTools: ["Copilot / AI coding assistants","OpenAI / Anthropic APIs","Embeddings / vector DBs","Feature stores","Databricks AI","dbt AI"],
     metrics: ["Pipeline reliability / SLA", "Data freshness", "Data quality", "Cost efficiency",
               "Throughput / volume", "Incident count", "Time-to-data"],
     backgrounds: BG_COMMON.concat(["Healthcare", "E-commerce", "AdTech", "Gaming"])
@@ -436,7 +436,6 @@ const ROLES = {
             options: ["AI-assisted IaC/scripting", "AIOps (anomaly detection/alerting)", "Serving AI/ML workloads (GPU/inference)", "MLOps / LLMOps infra", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "GPU on K8s, Kubeflow, inference servers, MLflow…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("Serving AI/ML workloads (GPU/inference)") || (a.usage || []).includes("MLOps / LLMOps infra"),
@@ -465,6 +464,7 @@ const ROLES = {
     ],
     aiUseCases: ["Pipeline / IaC generation", "Incident summarization", "Runbook generation",
                  "Log / anomaly analysis", "Config review", "Documentation"],
+    aiTools: ["GitHub Copilot","AIOps (Datadog / PagerDuty AI)","K8sGPT / K8s AI tooling","GPU infrastructure","Inference serving (vLLM / Triton)","OpenAI / Anthropic APIs"],
     metrics: ["Uptime / SLA", "MTTR", "Deployment frequency", "Change failure rate",
               "Lead time for changes", "Incident count", "Cloud cost / efficiency"],
     backgrounds: BG_COMMON.concat(["Cloud-native", "Healthcare", "E-commerce", "MSP / managed services"])
@@ -540,7 +540,6 @@ const ROLES = {
             options: ["Using LLMs in solutions", "Prompt engineering", "RAG / embeddings", "Fine-tuning", "AI-assisted analysis/coding", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of GenAI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific GenAI tools / skills?", placeholder: "OpenAI/Anthropic, LangChain, Hugging Face, vector DBs…" }
         ],
         tips: [
           { when: a => a.depth === "Core part of the role",
@@ -569,6 +568,7 @@ const ROLES = {
     ],
     aiUseCases: ["Model prototyping", "Code generation", "Data labeling / synthetic data",
                  "Literature / research assist", "Documentation", "Feature ideation"],
+    aiTools: ["Hugging Face","OpenAI / Anthropic APIs","LangChain","Fine-tuning / LoRA","RAG / vector DBs","AutoML","Copilot / AI coding assistants"],
     metrics: ["Model accuracy / AUC", "Precision / recall", "Model latency", "Business impact / lift",
               "Experiment velocity", "Models in production", "Data quality"],
     backgrounds: BG_COMMON.concat(["Healthcare", "AdTech", "E-commerce", "Research lab"])
@@ -642,7 +642,6 @@ const ROLES = {
             options: ["Platform AI features (Joule/Copilot)", "AI-assisted config/reporting", "Intelligent automation / RPA", "AI-driven analytics", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "SAP Joule, Copilot, Power Automate, UiPath…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("Platform AI features (Joule/Copilot)"),
@@ -673,6 +672,7 @@ const ROLES = {
     ],
     aiUseCases: ["Report / query generation", "Configuration assistance", "Documentation",
                  "Test-case generation", "Data migration assist", "Requirements drafting"],
+    aiTools: ["SAP Joule","Microsoft Copilot (Dynamics)","Oracle AI","UiPath / RPA","Power Automate","ChatGPT / Claude"],
     metrics: ["On-time implementation", "On-budget delivery", "User adoption", "Defect / rework rate",
               "Process efficiency gains", "Ticket resolution time", "Go-live success"],
     backgrounds: ["Manufacturing", "Retail / CPG", "Financial Services", "Healthcare", "Public sector",
@@ -768,7 +768,6 @@ const ROLES = {
             options: ["AI-assisted PM (status/summaries/planning)", "Managing AI/ML projects", "Driving AI tooling adoption", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "Copilot, ChatGPT/Claude, AI-enabled PM tools…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("Managing AI/ML projects"),
@@ -803,6 +802,7 @@ const ROLES = {
     ],
     aiUseCases: ["Status reporting", "Meeting summaries", "Risk analysis", "Resource planning",
                  "Documentation", "Estimate assistance"],
+    aiTools: ["ChatGPT / Claude","Microsoft Copilot (M365)","Jira AI / Atlassian Intelligence","Notion AI","AI meeting notes (Otter / Fireflies)"],
     metrics: ["On-time delivery", "On-budget delivery", "Scope adherence", "Team velocity",
               "Program / roadmap milestones", "Cross-team dependency health", "Stakeholder satisfaction",
               "Defect / escape rate", "Release cadence", "Cycle time"],
@@ -899,6 +899,7 @@ const ROLES = {
     ],
     aiUseCases: ["Code generation", "Eval automation", "Synthetic data generation",
                  "Prompt testing", "Documentation", "Research / literature review"],
+    aiTools: ["Claude / Anthropic API","OpenAI API","LangChain / LangGraph","LlamaIndex","Hugging Face","vLLM / model serving","Agent frameworks / MCP","Evals (LangSmith / Braintrust)"],
     metrics: ["Response quality / eval score", "Latency", "Cost per query", "Hallucination / accuracy rate",
               "Adoption / usage", "Deployment velocity", "Retrieval precision"],
     backgrounds: ["AI / ML startup", "Product company", "B2B SaaS", "Enterprise", "Research lab",
@@ -955,7 +956,6 @@ const ROLES = {
             options: ["Building AI/LLM app features", "Integrating AI APIs", "RAG / vector search", "AI-assisted coding", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "OpenAI/Anthropic APIs, LangChain, Vercel AI SDK, pgvector…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("Building AI/LLM app features"),
@@ -985,6 +985,7 @@ const ROLES = {
       { id: "build", label: "Build tools", placeholder: "Vite, Webpack, Turborepo…", options: ["Vite","Webpack","Turborepo","Nx","esbuild"] }
     ],
     aiUseCases: ["Code generation", "Code review", "Test generation", "Documentation", "Debugging"],
+    aiTools: ["GitHub Copilot","Cursor","Claude Code","v0 / Lovable","OpenAI / Anthropic APIs","Vercel AI SDK","RAG / vector DBs"],
     metrics: ["Feature velocity", "Uptime", "Defect rate", "Core Web Vitals", "Test coverage", "Deployment frequency"],
     backgrounds: BG_COMMON.concat(["E-commerce", "Healthcare", "Agency"])
   },
@@ -1043,7 +1044,6 @@ const ROLES = {
             options: ["On-device ML (Core ML / ML Kit)", "Building AI/LLM app features", "AI-assisted coding", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "Core ML, ML Kit, on-device LLMs, OpenAI APIs…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("On-device ML (Core ML / ML Kit)"),
@@ -1073,6 +1073,7 @@ const ROLES = {
       { id: "analytics", label: "Analytics / crash", placeholder: "Firebase, Crashlytics, Sentry…", options: ["Firebase Analytics","Crashlytics","Sentry","Amplitude","Mixpanel"] }
     ],
     aiUseCases: ["Code generation", "Test generation", "Documentation", "Crash analysis"],
+    aiTools: ["GitHub Copilot","Cursor","Core ML","ML Kit","On-device LLMs","OpenAI / Anthropic APIs","Firebase AI"],
     metrics: ["App store rating", "Crash-free rate", "App performance / load time", "Release cadence", "Adoption / retention"],
     backgrounds: BG_COMMON.concat(["Consumer apps", "E-commerce", "Fintech", "Healthcare", "Gaming"])
   },
@@ -1133,7 +1134,6 @@ const ROLES = {
             options: ["Architecting AI/ML platforms", "GenAI / LLM infrastructure", "AI landing zones / governance", "AI-assisted architecture", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI platforms / skills?", placeholder: "SageMaker, Vertex, Bedrock, Azure OpenAI…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("GenAI / LLM infrastructure"),
@@ -1165,6 +1165,7 @@ const ROLES = {
       { id: "cost", label: "Cost / FinOps", placeholder: "Cost Explorer, CloudHealth…", options: ["Cost Explorer","CloudHealth","Cloudability","Azure Cost Management","Kubecost"] }
     ],
     aiUseCases: ["Architecture assistance", "Documentation", "Cost analysis", "IaC generation"],
+    aiTools: ["AWS Bedrock","Azure OpenAI","GCP Vertex AI","SageMaker","GPU / AI infrastructure","RAG architectures","Copilot / AI assistants"],
     metrics: ["Cost savings", "Availability / uptime", "Migration success", "Well-Architected score", "Time-to-provision", "Security posture"],
     backgrounds: BG_COMMON.concat(["Healthcare", "Financial Services", "Government", "MSP / consulting"])
   },
@@ -1238,7 +1239,6 @@ const ROLES = {
             options: ["AI-driven threat detection", "Security copilots / triage", "Securing AI/LLM systems", "AI-assisted code scanning", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "Copilot for Security, AI SIEM, LLM security…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("Securing AI/LLM systems"),
@@ -1271,6 +1271,7 @@ const ROLES = {
       { id: "scripting", label: "Scripting", placeholder: "Python, PowerShell, Bash…", options: ["Python","PowerShell","Bash","KQL / SPL"] }
     ],
     aiUseCases: ["Threat detection", "Alert triage", "Code scanning", "Documentation", "Log analysis"],
+    aiTools: ["Microsoft Security Copilot","CrowdStrike Charlotte AI","AI-driven SIEM","LLM security / prompt-injection testing","AI governance / model risk","Copilot / AI coding assistants"],
     metrics: ["Vulnerabilities remediated", "MTTD", "MTTR", "Compliance posture", "Incidents", "Patch time", "False-positive rate"],
     backgrounds: BG_COMMON.concat(["Healthcare", "Financial Services", "Government / Defense", "Critical infrastructure"])
   },
@@ -1331,7 +1332,6 @@ const ROLES = {
             options: ["AI-assisted test generation", "Self-healing automation", "Visual / AI testing", "Testing AI/ML features", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "Testim, Applitools, mabl, Copilot…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("Testing AI/ML features"),
@@ -1360,6 +1360,7 @@ const ROLES = {
       { id: "bugtracking", label: "Bug tracking", placeholder: "Jira, Azure DevOps…", options: ["Jira","Azure DevOps","Linear","Bugzilla"] }
     ],
     aiUseCases: ["Test generation", "Test-data generation", "Bug triage", "Documentation", "Log analysis"],
+    aiTools: ["Testim","Applitools","mabl","GitHub Copilot","Self-healing tests (Playwright AI)","LLM-based test generation"],
     metrics: ["Defect detection rate", "Escaped defects", "Automation coverage %", "Test cycle time", "Release quality", "Flaky-test rate"],
     backgrounds: BG_COMMON.concat(["Healthcare", "E-commerce", "Gaming"])
   },
@@ -1429,7 +1430,6 @@ const ROLES = {
             options: ["Einstein / Agentforce", "Copilot for Dynamics", "AI-assisted config/code", "Predictive / AI features", "Not a factor"] },
           { id: "depth", type: "radio", label: "Depth of AI work?",
             options: ["Core part of the role", "Occasional / augmenting", "Just AI-assisted tooling"] },
-          { id: "tools", type: "text", label: "Specific AI tools / skills?", placeholder: "Einstein, Agentforce, Copilot Studio…" }
         ],
         tips: [
           { when: a => (a.usage || []).includes("Einstein / Agentforce") || (a.usage || []).includes("Copilot for Dynamics"),
@@ -1462,6 +1462,7 @@ const ROLES = {
       { id: "devops", label: "DevOps / release", placeholder: "Salesforce DX, Copado, Gearset…", options: ["Salesforce DX","Copado","Gearset","Azure DevOps","Change sets"] }
     ],
     aiUseCases: ["Config assistance", "Code generation", "Report generation", "Documentation", "Data cleanup"],
+    aiTools: ["Einstein / Agentforce","Copilot Studio","HubSpot AI","ChatGPT / Claude","Power Platform AI","Agent builders"],
     metrics: ["User adoption", "On-time delivery", "Data quality", "Automation / efficiency", "Defect rate", "Report usage"],
     backgrounds: BG_COMMON.concat(["Financial Services", "Healthcare", "Manufacturing", "Nonprofit"])
   }

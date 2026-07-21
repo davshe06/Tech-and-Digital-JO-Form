@@ -244,7 +244,10 @@ function configStepDef(key) {
       .concat([
         { id: "ai_usage", type: "chips", label: "How are you currently using AI in this function?", options: role.aiUseCases },
         { id: "ai_requirement", type: "radio", label: "Is AI experience preferred or required?",
-          options: ["Required", "Preferred", "Not important"] }
+          options: ["Required", "Preferred", "Not important"] },
+        { id: "ai_tools", type: "chips", label: "Which AI tools / skills should they have experience with?",
+          options: role.aiTools || [],
+          showIf: a => a.ai_requirement === "Required" || a.ai_requirement === "Preferred" }
       ]);
     return {
       title: "Tech Stack", subtitle: "Ask them to list every tool they use.",
