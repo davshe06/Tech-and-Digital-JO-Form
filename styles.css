@@ -346,8 +346,10 @@ h2 { margin: 0 0 6px; font-size: 26px; }
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 9px 11px;
-  resize: vertical;
+  resize: both;
   min-height: 380px;
+  min-width: 240px;
+  max-width: 58vw;
 }
 .notes-panel textarea:focus {
   outline: none;
@@ -729,7 +731,9 @@ textarea { resize: vertical; }
     border-left: none;
     border-top: 1px solid var(--line);
   }
-  .notes-panel textarea { min-height: 280px; }
+  /* Stacked layout: rail is full-width, so custom drag-widths don't apply. */
+  .notes-panel { width: 100% !important; }
+  .notes-panel textarea { min-height: 280px; width: 100% !important; resize: vertical; }
 }
 
 @media (max-width: 760px) {

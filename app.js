@@ -27,7 +27,7 @@ function blankJobOrder() {
     roleId: null,
     common: { basics: {}, logistics: {}, team: {}, closing: {} },
     roles: {},
-    notes: { pretext: "", live: "", pretextH: null, liveH: null },
+    notes: { pretext: "", live: "", pretextH: null, liveH: null, railW: null },
     aiAnalysis: null
   };
 }
@@ -1206,11 +1206,36 @@ function renderNotesPanel(app) {
   panel.appendChild(notesField("Live notes", "live",
     "Jot anything they mention that isn't a field on this screen…"));
   app.appendChild(panel);
+  applyRailWidth(panel);   /* after append — needs layout to measure scrollbar */
+}
+
+/* Dragging either textarea wider widens the whole rail so both boxes stay
+   equal width. The chosen width persists (state.notes.railW) like the
+   heights do. Only applies in the wide three-column layout — below 1080px
+   the rail is full-width and the CSS keeps it that way. */
+const RAIL_PAD = 36;      /* .notes-panel horizontal padding (18px each side) */
+const RAIL_MIN = 320;     /* default rail width */
+
+function railWidthPx() {
+  const w = state.notes.railW;
+  if (!w) return null;
+  const max = Math.floor(window.innerWidth * 0.6);
+  return Math.min(Math.max(w + RAIL_PAD, RAIL_MIN), max);
+}
+
+function applyRailWidth(panel) {
+  if (window.innerWidth <= 1080) return;
+  const w = railWidthPx();
+  if (!w) return;
+  /* add the rail's scrollbar/border width so the inner content area is
+     exactly railW and both textareas at width:100% match the dragged box */
+  const chrome = Math.max(0, panel.offsetWidth - panel.clientWidth);
+  panel.style.width = (w + chrome) + "px";
 }
 
 /* One notes field. Text autosaves; a manual resize is captured via
-   ResizeObserver and stored (…H), then reapplied so the chosen height
-   survives step changes. Width-only changes don't trigger a save. */
+   ResizeObserver and stored (…H / railW), then reapplied so the chosen
+   size survives step changes. */
 function notesField(labelText, key, placeholder) {
   const hKey = key + "H";
   const block = el("div", "notes-block");
@@ -1222,12 +1247,26 @@ function notesField(labelText, key, placeholder) {
   ta.addEventListener("input", () => { state.notes[key] = ta.value; saveState(); });
 
   if (typeof ResizeObserver !== "undefined") {
-    let lastH = null;
+    let lastW = null, lastH = null;
     const ro = new ResizeObserver(() => {
-      const h = ta.offsetHeight;
-      if (!h) return;
-      if (lastH === null) { lastH = h; return; }   // first measurement = baseline
-      if (h !== lastH) { lastH = h; state.notes[hKey] = h; saveState(); }
+      const w = ta.offsetWidth, h = ta.offsetHeight;
+      if (!w || !h) return;
+      if (lastH === null) { lastW = w; lastH = h; return; }   // first measurement = baseline
+      let changed = false;
+      if (h !== lastH) { lastH = h; state.notes[hKey] = h; changed = true; }
+      if (w !== lastW) {
+        lastW = w;
+        /* Only an element with an inline width was actually drag-resized by
+           the user; the other textarea is just following the rail at 100%
+           and must not feed back into railW (that loops via the scrollbar). */
+        if (ta.style.width) {
+          state.notes.railW = w;
+          const panel = ta.closest(".notes-panel");
+          if (panel) applyRailWidth(panel);
+          changed = true;
+        }
+      }
+      if (changed) saveState();
     });
     ro.observe(ta);
   }
