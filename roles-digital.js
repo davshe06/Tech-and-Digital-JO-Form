@@ -721,6 +721,480 @@ const ROLES = {
               "Bug / defect rate", "Sprint velocity", "Uptime", "Bundle size"],
     backgrounds: ["Agency", "Product company", "B2B SaaS", "Consumer apps", "E-commerce",
                   "Fintech", "Enterprise", "Startup"]
+  },
+
+  /* --------------------------------------------------- GENAI ARTIST */
+  genai_artist: {
+    label: "GenAI Artist",
+    icon: "🖼️",
+    tagline: "Generative image, video, and concept art with AI tooling",
+    blurb: "“GenAI Artist” spans marketing creative, concept art, product visuals, and full motion — and the tool stack changes the pool completely. Pin the primary tools, whether they train/fine-tune models, and how much traditional craft (Photoshop, compositing, art direction) the role still needs. Recruit for the 70–80%.",
+    timePrompt: "“If this artist only had time to be exceptional at three things across generation, editing, and direction, what would they be — and roughly what share of the week does each take?”",
+    focusAreas: [
+      { id: "image_gen", label: "Image Generation", icon: "🎨", deepDive: {
+        intro: "The tool is the single biggest filter — each has a distinct craft and community.",
+        questions: [
+          { id: "tools", type: "chips", label: "Primary generation tools?",
+            options: ["Midjourney", "DALL·E", "Stable Diffusion", "Flux", "Adobe Firefly", "Ideogram", "Other"] },
+          { id: "control", type: "chips", label: "Control techniques expected?",
+            options: ["ControlNet", "Inpainting / outpainting", "Img2img", "Reference / style transfer", "Regional prompting"] },
+          { id: "volume", type: "select", label: "Output volume?",
+            options: ["A few hero pieces", "Steady campaign volume", "High-volume production", "Unknown"] }
+        ],
+        tips: [
+          { when: a => (a.tools || []).includes("Stable Diffusion") || (a.tools || []).includes("Flux"),
+            text: "Stable Diffusion / Flux signal a hands-on, technical artist (ControlNet, local pipelines) — a different pool from Midjourney-only prompt artists." }
+        ] } },
+      { id: "prompt_craft", label: "Prompt Craft", icon: "✍️", deepDive: {
+        intro: "Prompt fluency separates consistent pros from lucky one-offs.",
+        questions: [
+          { id: "consistency", type: "radio", label: "Is character / style consistency required?",
+            options: ["Yes — recurring characters/brand", "Somewhat", "Not important"] },
+          { id: "systems", type: "radio", label: "Prompt libraries / systems maintained?",
+            options: ["Yes — documented system", "Informal", "No"] }
+        ],
+        tips: [
+          { when: a => a.consistency === "Yes — recurring characters/brand",
+            text: "Consistent characters/brand across generations is genuinely hard — screen for portfolios showing the SAME subject across many scenes, not one-off images." }
+        ] } },
+      { id: "fine_tuning", label: "Model Training / Fine-Tuning", icon: "🧠", deepDive: {
+        intro: "Custom models (LoRAs, embeddings) push this toward a technical specialist.",
+        questions: [
+          { id: "scope", type: "chips", label: "What's in scope?",
+            options: ["Training LoRAs", "Textual inversion / embeddings", "Fine-tuning base models", "Dataset curation"] },
+          { id: "infra", type: "radio", label: "Local GPU / cloud pipeline expected?",
+            options: ["Yes — runs own pipeline", "Uses hosted services", "Not sure"] }
+        ],
+        tips: [
+          { when: (a, s) => areaPriority(s, "fine_tuning") === "must",
+            text: "Fine-tuning as a must-have narrows the pool to technically deep artists — expect higher rates and screen for actual trained models, not just usage." }
+        ] } },
+      { id: "post", label: "Post-Production / Editing", icon: "🖌️", deepDive: {
+        intro: "Most production-grade GenAI work still needs real editing chops.",
+        questions: [
+          { id: "tools", type: "chips", label: "Editing tools?",
+            options: ["Photoshop", "After Effects", "Illustrator", "DaVinci / Premiere", "Figma", "Nuke / compositing"] },
+          { id: "role", type: "radio", label: "How much manual finishing?",
+            options: ["Heavy — AI is a starting point", "Moderate cleanup", "Minimal — mostly raw generations"] }
+        ],
+        tips: [
+          { when: a => a.role === "Minimal — mostly raw generations",
+            text: "If raw generations ship as-is, the bar is prompt/curation taste over craft — but confirm the client's quality expectations match that." }
+        ] } },
+      { id: "video", label: "Video / Motion", icon: "🎬", deepDive: {
+        intro: "AI video is a distinct, fast-moving skill set from still images.",
+        questions: [
+          { id: "tools", type: "chips", label: "Which video tools?",
+            options: ["Runway", "Sora", "Pika", "Kling", "Luma", "Veo", "Other"] },
+          { id: "scope", type: "chips", label: "What's in scope?",
+            options: ["Short social clips", "Ads / commercials", "Animation", "VFX / compositing"] }
+        ],
+        tips: [
+          { when: (a, s) => areaPriority(s, "video") === "must",
+            text: "AI video specialists are scarce and the tooling shifts monthly — screen for a recent reel, not just tool names on a résumé." }
+        ] } },
+      { id: "art_direction", label: "Art Direction / Brand", icon: "🎯", deepDive: {
+        intro: "Directing a look is different from executing prompts.",
+        questions: [
+          { id: "scope", type: "chips", label: "Direction responsibilities?",
+            options: ["Own the visual style", "Maintain brand consistency", "Direct other creatives", "Client / stakeholder pitching"] },
+          { id: "seniority", type: "radio", label: "Executor or director?",
+            options: ["Hands-on executor", "Player-coach", "Primarily director"] }
+        ],
+        tips: [
+          { when: a => a.seniority === "Primarily director",
+            text: "A director-level hire needs a traditional art/creative-direction background plus AI fluency — a rarer, more expensive profile." }
+        ] } },
+      { id: "threed", label: "3D / Asset Generation", icon: "🧊", deepDive: {
+        intro: "3D and game-asset generation is an emerging niche.",
+        questions: [
+          { id: "tools", type: "chips", label: "3D / asset tools?",
+            options: ["Meshy", "Luma / Genie", "Blender", "Spline", "Texture generation", "Other"] },
+          { id: "pipeline", type: "text", label: "Where do assets go?", placeholder: "Game engine, product viz, AR/VR, print…" }
+        ], tips: [] } },
+      { id: "ethics", label: "Rights, Licensing & Ethics", icon: "⚖️", deepDive: {
+        intro: "Commercial GenAI work lives or dies on usage rights.",
+        questions: [
+          { id: "concerns", type: "chips", label: "What matters here?",
+            options: ["Commercial-safe models", "Copyright / IP clearance", "Likeness / consent", "Disclosure requirements"] },
+          { id: "commercial", type: "radio", label: "Is the output used commercially?",
+            options: ["Yes — public campaigns", "Internal only", "Not sure"] }
+        ],
+        tips: [
+          { when: a => a.commercial === "Yes — public campaigns",
+            text: "Public commercial use means IP-safe tooling (e.g., Firefly) and clearance awareness are real requirements — screen for it." }
+        ] } }
+    ],
+    specialists: [
+      { label: "Graphic / Visual Designer", overlapsArea: "post" },
+      { label: "Motion Designer", overlapsArea: "video" },
+      { label: "Art Director", overlapsArea: "art_direction" },
+      { label: "3D Artist", overlapsArea: "threed" },
+      { label: "ML / AI Engineer", overlapsArea: "fine_tuning" },
+      { label: "Brand / Creative Team", overlapsArea: null }
+    ],
+    profileRules: [
+      { must: ["image_gen", "post"], profile: "Production GenAI artist",
+        detail: "Target designers/illustrators who pair AI generation with real editing craft. Portfolio = finished, shipped creative, not raw grids." },
+      { must: ["fine_tuning", "threed"], profile: "Technical GenAI artist",
+        detail: "Target artists who train models and build pipelines. LoRAs, ControlNet, and custom workflows are the filters." },
+      { must: ["art_direction", "image_gen"], profile: "AI-fluent art director",
+        detail: "Target art directors who've adopted AI. Style ownership and brand consistency are the filters." }
+    ],
+    stackCategories: [
+      { id: "gen", label: "Generation tools", placeholder: "Midjourney, Stable Diffusion, Flux…" },
+      { id: "video", label: "AI video / motion", placeholder: "Runway, Sora, Pika…" },
+      { id: "edit", label: "Editing / post", placeholder: "Photoshop, After Effects…" },
+      { id: "threed", label: "3D / assets", placeholder: "Blender, Meshy, Spline…" },
+      { id: "workflow", label: "Workflow / pipeline", placeholder: "ComfyUI, Automatic1111, APIs…" },
+      { id: "collab", label: "Collaboration / DAM", placeholder: "Figma, Frame.io, Notion…" }
+    ],
+    aiUseCases: ["Concept / ideation", "Campaign creative", "Product / marketing visuals", "Storyboards",
+                 "Style exploration", "Video generation", "Asset variations", "Personalized creative"],
+    metrics: ["Output volume", "Turnaround time", "Creative approval rate", "Brand consistency",
+              "Campaign performance", "Cost per asset", "Stakeholder satisfaction"],
+    backgrounds: ["Agency", "Brand / in-house creative", "Entertainment / media", "Gaming",
+                  "E-commerce", "Advertising", "Startup", "Design studio"]
+  },
+
+  /* ----------------------------------------------------- VIBE CODER */
+  vibe_coder: {
+    label: "Vibe Coder",
+    icon: "🛠️",
+    tagline: "AI-native builder shipping fast with agentic coding tools",
+    blurb: "A “Vibe Coder” builds and ships with AI coding tools (Cursor, Claude Code, v0, Lovable, Replit) far faster than a traditional dev — but the depth ranges from polished prototyper to production engineer. Pin how far the output has to go (throwaway demo vs. production) and how much real engineering judgment the role needs. Recruit for the 70–80%.",
+    timePrompt: "“What will this builder actually spend the week doing — prototyping, shipping features, product/design, wiring integrations? Roughly what percentage each?”",
+    focusAreas: [
+      { id: "ai_tools", label: "AI Coding Tools", icon: "🤖", deepDive: {
+        intro: "Tool fluency is the defining trait — get specific about the stack.",
+        questions: [
+          { id: "tools", type: "chips", label: "Which AI build tools?",
+            options: ["Cursor", "Claude Code", "GitHub Copilot", "v0", "Lovable", "Replit / Agent", "Bolt", "Windsurf"] },
+          { id: "agentic", type: "radio", label: "Agentic / autonomous coding depth?",
+            options: ["Drives multi-file agentic work", "Assisted / inline completions", "Light usage"] }
+        ],
+        tips: [
+          { when: a => a.agentic === "Drives multi-file agentic work",
+            text: "Driving agentic tools well is its own skill — screen for how they scope, review, and correct AI output, not just which tools they name." }
+        ] } },
+      { id: "prototyping", label: "Rapid Prototyping / MVPs", icon: "⚡", deepDive: {
+        intro: "Speed-to-demo is the whole point — clarify what 'done' means.",
+        questions: [
+          { id: "output", type: "radio", label: "What does the output need to be?",
+            options: ["Throwaway demos / mockups", "Working MVPs", "Production features"] },
+          { id: "cadence", type: "text", label: "Expected shipping cadence?", placeholder: "e.g., a prototype a week, feature every few days" }
+        ],
+        tips: [
+          { when: a => a.output === "Production features",
+            text: "If AI-built code must hit production, you need real engineering judgment on top of vibe-coding speed — screen for testing, review, and debugging discipline." }
+        ] } },
+      { id: "product", label: "Product & Design Sense", icon: "✨", deepDive: {
+        intro: "Great vibe coders are often product people who can build.",
+        questions: [
+          { id: "scope", type: "chips", label: "Product responsibilities?",
+            options: ["Define what to build", "UI / UX decisions", "User feedback loops", "Prioritization"] },
+          { id: "design", type: "radio", label: "Design ownership?",
+            options: ["Owns look & feel", "Works from designs", "Not a focus"] }
+        ],
+        tips: [
+          { when: a => (a.scope || []).includes("Define what to build"),
+            text: "If they decide WHAT to build, this is a product-engineer / founder-type profile — target builders with 0→1 and side-project track records." }
+        ] } },
+      { id: "fullstack", label: "Full-Stack Fundamentals", icon: "🧱", deepDive: {
+        intro: "AI accelerates output, but fundamentals decide whether it holds up.",
+        questions: [
+          { id: "stack", type: "text", label: "Typical stack?", placeholder: "Next.js, React, Node, Supabase, Postgres…" },
+          { id: "depth", type: "radio", label: "How deep must the fundamentals go?",
+            options: ["Strong CS/engineering fundamentals", "Solid working knowledge", "Can rely on AI for most of it"] }
+        ],
+        tips: [
+          { when: a => a.depth === "Can rely on AI for most of it",
+            text: "Leaning on AI for fundamentals is fine for prototypes but risky for anything users depend on — make sure the client's risk tolerance matches." }
+        ] } },
+      { id: "shipping", label: "Deployment & Shipping", icon: "🚀", deepDive: {
+        intro: "Getting it live is part of the job for AI-native builders.",
+        questions: [
+          { id: "platforms", type: "chips", label: "Deploy / hosting?",
+            options: ["Vercel", "Netlify", "Replit", "Supabase", "Cloudflare", "AWS / GCP", "Other"] },
+          { id: "ops", type: "radio", label: "Own their own deploys / infra?",
+            options: ["Yes — end to end", "With support", "No"] }
+        ], tips: [] } },
+      { id: "integration", label: "APIs & Integrations", icon: "🔌", deepDive: {
+        intro: "Most AI-built apps are glue between APIs and LLMs.",
+        questions: [
+          { id: "surface", type: "chips", label: "What do they wire together?",
+            options: ["Third-party APIs", "LLM / AI APIs", "Auth / payments", "Databases", "Automation (Zapier/n8n)"] },
+          { id: "ai_features", type: "radio", label: "Building AI features into the product?",
+            options: ["Yes — core to the product", "Some", "No"] }
+        ],
+        tips: [
+          { when: a => a.ai_features === "Yes — core to the product",
+            text: "Building AI INTO the product (prompts, RAG, agents) is distinct from using AI to code — confirm which the client actually needs." }
+        ] } },
+      { id: "iteration", label: "Debugging & Iteration", icon: "🔁", deepDive: {
+        intro: "Reviewing and fixing AI output is where quality is won or lost.",
+        questions: [
+          { id: "practices", type: "chips", label: "Quality practices expected?",
+            options: ["Code review of AI output", "Testing", "Version control discipline", "Refactoring"] }
+        ], tips: [] } }
+    ],
+    specialists: [
+      { label: "Software Engineer", overlapsArea: "fullstack" },
+      { label: "Product Manager", overlapsArea: "product" },
+      { label: "Designer", overlapsArea: "product" },
+      { label: "DevOps / Platform", overlapsArea: "shipping" },
+      { label: "AI Engineer", overlapsArea: "integration" },
+      { label: "Founder / Technical Lead", overlapsArea: null }
+    ],
+    profileRules: [
+      { must: ["ai_tools", "product"], profile: "AI-native product builder",
+        detail: "Target 0→1 builders and technical founders. Shipped side projects and live demos matter more than a traditional résumé." },
+      { must: ["fullstack", "shipping"], profile: "AI-accelerated full-stack engineer",
+        detail: "Target engineers who've adopted agentic tools. Real fundamentals plus AI speed are the filters." },
+      { must: ["integration", "prototyping"], profile: "Prototyper / hacker",
+        detail: "Target fast builders who wire APIs and LLMs into working demos. A portfolio of live projects is the filter." }
+    ],
+    stackCategories: [
+      { id: "aitools", label: "AI coding tools", placeholder: "Cursor, Claude Code, v0…" },
+      { id: "frontend", label: "Front-end", placeholder: "React, Next.js, Tailwind…" },
+      { id: "backend", label: "Back-end / data", placeholder: "Node, Supabase, Postgres…" },
+      { id: "ai", label: "AI / LLM APIs", placeholder: "Anthropic, OpenAI, LangChain…" },
+      { id: "deploy", label: "Deploy / hosting", placeholder: "Vercel, Netlify, Cloudflare…" },
+      { id: "automation", label: "Automation / glue", placeholder: "Zapier, n8n, Make…" }
+    ],
+    aiUseCases: ["Building the app itself", "Prototyping features", "Debugging", "Refactoring",
+                 "Writing tests", "Wiring integrations", "Generating UI", "Product ideation"],
+    metrics: ["Shipping velocity", "Time to prototype", "Features shipped", "Product outcomes",
+              "User adoption", "Iteration speed", "Uptime / reliability"],
+    backgrounds: ["Startup", "Founder / indie hacker", "Product company", "Agency",
+                  "Freelance", "Big tech", "Bootcamp / self-taught"]
+  },
+
+  /* ---------------------------------------- CHATBOT DEVELOPER/DESIGNER */
+  chatbot_developer: {
+    label: "Chatbot Developer / Designer",
+    icon: "💬",
+    tagline: "Conversational AI, assistants, and LLM-powered agents",
+    blurb: "This role swings from conversation design (the words and flows) to engineering (NLU, LLMs, integrations) — and a modern “chatbot” usually means an LLM agent, not an intent tree. Pin whether the client needs a designer, an engineer, or a hybrid, and whether it's classic NLU or GenAI. Recruit for the 70–80%.",
+    timePrompt: "“Between conversation design, AI/NLU engineering, integrations, and optimization — what three things carry the week, and roughly what percentage each?”",
+    focusAreas: [
+      { id: "convo_design", label: "Conversation Design", icon: "🗨️", deepDive: {
+        intro: "Designing the dialogue is a craft distinct from building it.",
+        questions: [
+          { id: "scope", type: "chips", label: "Design responsibilities?",
+            options: ["Dialogue flows", "Persona / tone", "Error / fallback handling", "Multilingual", "Voice + chat"] },
+          { id: "dedicated", type: "radio", label: "Dedicated designer or design + build?",
+            options: ["Dedicated conversation designer", "Designs and builds", "Mostly builds"] }
+        ],
+        tips: [
+          { when: a => a.dedicated === "Dedicated conversation designer",
+            text: "A pure conversation designer is a UX-adjacent profile (writing, linguistics, UX) — a different pool from bot engineers." }
+        ] } },
+      { id: "llm", label: "LLM / GenAI", icon: "🧠", deepDive: {
+        intro: "Most new builds are LLM-based — pin the depth of GenAI engineering.",
+        questions: [
+          { id: "approach", type: "chips", label: "GenAI techniques in scope?",
+            options: ["Prompt engineering", "RAG / knowledge base", "Function calling / tools", "Agents / multi-step", "Fine-tuning"] },
+          { id: "models", type: "text", label: "Which models / providers?", placeholder: "Claude, GPT, Gemini, open models…" },
+          { id: "eval", type: "radio", label: "Evaluation / quality process expected?",
+            options: ["Yes — formal evals", "Informal / spot checks", "Not defined"] }
+        ],
+        tips: [
+          { when: a => (a.approach || []).includes("RAG / knowledge base") || (a.approach || []).includes("Agents / multi-step"),
+            text: "RAG and agentic flows are real AI-engineering work — screen for shipped LLM apps with retrieval/tools, not just prompt tinkering." }
+        ] } },
+      { id: "nlu", label: "NLU / Intent Platforms", icon: "🎯", deepDive: {
+        intro: "Classic intent-based platforms are a different skill from LLMs.",
+        questions: [
+          { id: "platform", type: "chips", label: "Which platforms?",
+            options: ["Dialogflow", "Rasa", "Microsoft Bot Framework", "Amazon Lex", "IBM watsonx", "Kore.ai", "Other"] },
+          { id: "hybrid", type: "radio", label: "Classic NLU, LLM, or hybrid?",
+            options: ["Classic intent/NLU", "LLM-based", "Hybrid"] }
+        ],
+        tips: [
+          { when: a => (a.platform || []).includes("Rasa"),
+            text: "Rasa signals a code-first, self-hosted NLU build — a narrower, more engineering-heavy pool than low-code platforms." }
+        ] } },
+      { id: "channels", label: "Channels & Platforms", icon: "📱", deepDive: {
+        intro: "Where the bot lives shapes the integration and design work.",
+        questions: [
+          { id: "channels", type: "chips", label: "Which channels?",
+            options: ["Web chat", "WhatsApp / SMS", "Slack / Teams", "Voice / IVR", "Mobile app", "Social DMs"] },
+          { id: "voice", type: "radio", label: "Voice in scope?",
+            options: ["Yes — voice / IVR", "No — text only", "Both"] }
+        ],
+        tips: [
+          { when: a => a.voice === "Yes — voice / IVR" || (a.channels || []).includes("Voice / IVR"),
+            text: "Voice adds speech (ASR/TTS), latency, and barge-in concerns — a meaningfully different and smaller skill pool than text bots." }
+        ] } },
+      { id: "integration", label: "Backend & Integrations", icon: "🔌", deepDive: {
+        intro: "A useful bot is wired into real systems.",
+        questions: [
+          { id: "systems", type: "chips", label: "Integrations expected?",
+            options: ["CRM", "Ticketing / helpdesk", "Databases / APIs", "Auth", "Payments", "Live-agent handoff"] },
+          { id: "lang", type: "text", label: "Backend language / stack?", placeholder: "Python, Node, etc." }
+        ], tips: [] } },
+      { id: "analytics", label: "Analytics & Optimization", icon: "📊", deepDive: {
+        intro: "Post-launch tuning is where containment and CSAT are won.",
+        questions: [
+          { id: "scope", type: "chips", label: "What's tracked / improved?",
+            options: ["Containment / deflection", "Intent accuracy", "CSAT", "Drop-off analysis", "A/B testing"] },
+          { id: "tools", type: "text", label: "Analytics tools?", placeholder: "Platform native, Botanalytics, Dashbot…" }
+        ], tips: [] } },
+      { id: "safety", label: "Guardrails & Safety", icon: "🛡️", deepDive: {
+        intro: "LLM bots need guardrails against hallucination and misuse.",
+        questions: [
+          { id: "concerns", type: "chips", label: "What's required?",
+            options: ["Hallucination controls", "PII / privacy", "Content moderation", "Compliance (HIPAA/finance)", "Prompt-injection defense"] }
+        ],
+        tips: [
+          { when: a => (a.concerns || []).includes("Compliance (HIPAA/finance)"),
+            text: "Regulated-domain bots (health/finance) demand compliance experience — a real screening filter that narrows the pool." }
+        ] } }
+    ],
+    specialists: [
+      { label: "Conversation Designer", overlapsArea: "convo_design" },
+      { label: "AI / ML Engineer", overlapsArea: "llm" },
+      { label: "NLU Engineer", overlapsArea: "nlu" },
+      { label: "Backend Developer", overlapsArea: "integration" },
+      { label: "UX Writer", overlapsArea: "convo_design" },
+      { label: "Data Analyst", overlapsArea: "analytics" }
+    ],
+    profileRules: [
+      { must: ["llm", "integration"], profile: "Conversational AI engineer",
+        detail: "Target engineers who've shipped LLM assistants with RAG/tools and real integrations. Production GenAI apps are the filter." },
+      { must: ["convo_design", "channels"], profile: "Conversation designer",
+        detail: "Target conversation-design / UX-writing titles. Flow design, persona, and dialogue samples are the filters." },
+      { must: ["nlu", "analytics"], profile: "Bot platform developer",
+        detail: "Target Dialogflow/Rasa/Lex builders. Intent modeling and an optimization track record are the filters." }
+    ],
+    stackCategories: [
+      { id: "llm", label: "LLM / AI", placeholder: "Claude, GPT, LangChain, LlamaIndex…" },
+      { id: "platform", label: "Bot / NLU platform", placeholder: "Dialogflow, Rasa, Lex…" },
+      { id: "backend", label: "Backend", placeholder: "Python, Node, FastAPI…" },
+      { id: "channels", label: "Channels", placeholder: "Web, WhatsApp, Twilio, Slack…" },
+      { id: "data", label: "Data / vector store", placeholder: "Pinecone, pgvector, Elastic…" },
+      { id: "analytics", label: "Analytics", placeholder: "Botanalytics, Dashbot, GA…" }
+    ],
+    aiUseCases: ["The bot itself (core product)", "Intent generation", "Response drafting", "Test conversation generation",
+                 "Summarizing transcripts", "Knowledge-base retrieval", "Sentiment analysis"],
+    metrics: ["Containment / deflection rate", "CSAT", "Intent accuracy", "Resolution rate",
+              "Fallback rate", "Handoff rate", "Engagement", "Response latency"],
+    backgrounds: ["SaaS", "Customer support / CX", "Enterprise", "Healthcare", "Financial Services",
+                  "E-commerce", "Agency", "Startup"]
+  },
+
+  /* ------------------------------------------ VR / AR DESIGNER/DEVELOPER */
+  vr_ar_developer: {
+    label: "VR / AR Designer / Developer",
+    icon: "🥽",
+    tagline: "Immersive, spatial, and mixed-reality experiences",
+    blurb: "Immersive roles split between design (spatial UX, interaction) and development (Unity/Unreal engineering), across very different hardware (Quest, Vision Pro, mobile AR, HoloLens). Pin the engine, the target device, and whether this is a designer, a developer, or a hybrid. Recruit for the 70–80%.",
+    timePrompt: "“Across engine work, interaction/spatial design, 3D assets, and optimization — what three things carry most of the week, and roughly what percentage each?”",
+    focusAreas: [
+      { id: "engine", label: "Engine / Development", icon: "🎮", deepDive: {
+        intro: "The engine is the hardest filter on the pool.",
+        questions: [
+          { id: "engine", type: "radio", label: "Primary engine?",
+            options: ["Unity", "Unreal", "WebXR (three.js/Babylon)", "Native (RealityKit/ARKit)", "Other"] },
+          { id: "lang", type: "text", label: "Language?", placeholder: "C#, C++, JavaScript, Swift…" },
+          { id: "years", type: "select", label: "Years in that engine expected?",
+            options: ["1–2", "3–4", "5–7", "8+"] }
+        ],
+        tips: [
+          { when: a => a.engine === "Unreal",
+            text: "Unreal (C++/Blueprints) is a distinct, smaller pool from Unity (C#) — don't assume crossover; confirm which is truly required." }
+        ] } },
+      { id: "interaction", label: "Interaction & Spatial Design", icon: "🖐️", deepDive: {
+        intro: "Spatial UX is a newer design discipline — clarify the depth.",
+        questions: [
+          { id: "scope", type: "chips", label: "Design responsibilities?",
+            options: ["Spatial UI / UX", "Hand / controller interaction", "Gaze / voice input", "Locomotion", "Onboarding / tutorials"] },
+          { id: "dedicated", type: "radio", label: "Dedicated designer or design + build?",
+            options: ["Dedicated XR designer", "Designs and builds", "Mostly builds"] }
+        ],
+        tips: [
+          { when: a => a.dedicated === "Dedicated XR designer",
+            text: "A dedicated immersive/spatial designer is rare — target XR/product designers with shipped headset UX, a different pool from engine developers." }
+        ] } },
+      { id: "platform", label: "Platform / Hardware", icon: "📟", deepDive: {
+        intro: "Target hardware drives SDKs, constraints, and the pool.",
+        questions: [
+          { id: "devices", type: "chips", label: "Target devices?",
+            options: ["Meta Quest", "Apple Vision Pro", "HoloLens", "Mobile AR (ARKit/ARCore)", "PCVR / SteamVR", "PlayStation VR"] },
+          { id: "type", type: "radio", label: "Primary modality?",
+            options: ["VR (fully immersive)", "AR (overlay)", "MR / passthrough", "Mix"] }
+        ],
+        tips: [
+          { when: a => (a.devices || []).includes("Apple Vision Pro"),
+            text: "Vision Pro work (visionOS / RealityKit / Swift) is a young, small talent pool — expect scarcity and reset timeline expectations." }
+        ] } },
+      { id: "assets", label: "3D Modeling & Assets", icon: "🧊", deepDive: {
+        intro: "Who makes the 3D content changes the profile.",
+        questions: [
+          { id: "tools", type: "chips", label: "3D / asset tools?",
+            options: ["Blender", "Maya", "3ds Max", "Substance", "Photogrammetry / scanning", "AI 3D gen"] },
+          { id: "responsibility", type: "radio", label: "Do they create assets or integrate them?",
+            options: ["Creates 3D assets", "Integrates existing assets", "Both"] }
+        ],
+        tips: [
+          { when: a => a.responsibility === "Creates 3D assets",
+            text: "Expecting one person to both engineer AND model 3D is a rare combo — confirm it's required vs. splitting the work." }
+        ] } },
+      { id: "performance", label: "Performance & Optimization", icon: "⚡", deepDive: {
+        intro: "Headset performance (framerate, comfort) is make-or-break.",
+        questions: [
+          { id: "focus", type: "chips", label: "Optimization focus?",
+            options: ["Frame rate / draw calls", "Poly / texture budgets", "Thermal / battery", "Foveated rendering", "Occlusion / LODs"] },
+          { id: "target", type: "text", label: "Performance target?", placeholder: "e.g., 72/90/120 fps on Quest" }
+        ],
+        tips: [
+          { when: (a, s) => areaPriority(s, "performance") === "must",
+            text: "Standalone-headset performance work is specialized — screen for shipped experiences that held target framerate, not just PCVR demos." }
+        ] } },
+      { id: "comfort", label: "UX Comfort & Accessibility", icon: "🌀", deepDive: {
+        intro: "Motion sickness and comfort are unique XR concerns.",
+        questions: [
+          { id: "scope", type: "chips", label: "What's in scope?",
+            options: ["Motion-sickness mitigation", "Comfort options", "Accessibility", "Ergonomics / session length"] }
+        ], tips: [] } },
+      { id: "prototyping", label: "Prototyping", icon: "🧩", deepDive: {
+        intro: "Rapid immersive prototyping is a valued, distinct skill.",
+        questions: [
+          { id: "tools", type: "chips", label: "Prototyping tools?",
+            options: ["ShapesXR", "Bezi", "Figma + XR plugins", "In-engine grayboxing", "Gravity Sketch"] }
+        ], tips: [] } }
+    ],
+    specialists: [
+      { label: "Unity / Unreal Developer", overlapsArea: "engine" },
+      { label: "3D Artist", overlapsArea: "assets" },
+      { label: "XR / Spatial Designer", overlapsArea: "interaction" },
+      { label: "Technical Artist", overlapsArea: "performance" },
+      { label: "Product Manager", overlapsArea: null },
+      { label: "QA (device testing)", overlapsArea: null }
+    ],
+    profileRules: [
+      { must: ["engine", "performance"], profile: "XR / immersive developer",
+        detail: "Target Unity/Unreal engineers with shipped headset apps. Engine depth and on-device performance are the filters." },
+      { must: ["interaction", "comfort"], profile: "XR / spatial designer",
+        detail: "Target immersive designers. Spatial UX, interaction patterns, and comfort-aware design are the filters." },
+      { must: ["engine", "assets"], profile: "Technical artist / generalist",
+        detail: "Target XR generalists who both build and model. Shipped end-to-end experiences are the filter." }
+    ],
+    stackCategories: [
+      { id: "engine", label: "Engine", placeholder: "Unity, Unreal, WebXR…" },
+      { id: "lang", label: "Languages", placeholder: "C#, C++, Swift, JS…" },
+      { id: "sdk", label: "XR SDKs", placeholder: "OpenXR, ARKit, ARCore, MRTK…" },
+      { id: "threed", label: "3D / assets", placeholder: "Blender, Maya, Substance…" },
+      { id: "proto", label: "Prototyping", placeholder: "ShapesXR, Gravity Sketch…" },
+      { id: "devices", label: "Target devices", placeholder: "Quest, Vision Pro, HoloLens…" }
+    ],
+    aiUseCases: ["3D asset generation", "Code generation", "Environment / scene generation",
+                 "NPC / interaction logic", "Texture generation", "Prototyping"],
+    metrics: ["Frame rate / performance", "Comfort / sickness scores", "Session length", "User engagement",
+              "Crash / stability rate", "Load times", "Task completion"],
+    backgrounds: ["Gaming / game studio", "Entertainment / media", "Enterprise / training",
+                  "Healthcare / simulation", "Product company", "Agency", "Startup", "Defense / aerospace"]
   }
 };
 
@@ -730,7 +1204,11 @@ const ROLE_ORDER = [
   "ux_designer",
   "marketing_automation",
   "digital_pm",
-  "frontend_developer"
+  "frontend_developer",
+  "genai_artist",
+  "vibe_coder",
+  "chatbot_developer",
+  "vr_ar_developer"
 ];
 
 
