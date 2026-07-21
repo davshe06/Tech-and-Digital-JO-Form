@@ -195,8 +195,7 @@ function wizardSteps() {
     { kind: "config", key: "logistics" },
     { kind: "config", key: "team" },
     { kind: "allocator" },
-    { kind: "deepdives" },
-    { kind: "config", key: "stack" },
+    { kind: "deepdives" },   /* combined focus-area drill-downs + tools ("Tech Stack") */
     { kind: "config", key: "success" },
     { kind: "config", key: "closing" },
     { kind: "review" }
@@ -206,10 +205,10 @@ function wizardSteps() {
 function stepTitle(w) {
   if (w.kind === "basics") return "Role & Basics";
   if (w.kind === "allocator") return "Focus Areas & % of Time";
-  if (w.kind === "deepdives") return "Deep Dives";
+  if (w.kind === "deepdives") return "Tech Stack";
   if (w.kind === "review") return "Review & Export";
   return { logistics: "Logistics & Budget", team: "Team Structure",
-           stack: "Tech Stack & AI", success: "Success & Candidate", closing: "Closing" }[w.key];
+           success: "Success & Candidate", closing: "Closing" }[w.key];
 }
 
 /* Build the {title, subtitle, coach, questions, tips, answers} definition for
@@ -228,15 +227,27 @@ function configStepDef(key) {
   if (key === "stack") {
     if (!role) return null;
     const rs = roleState();
-    const questions = role.stackCategories.map(c => ({ id: c.id, type: "text", label: c.label, placeholder: c.placeholder }))
-      .concat((rs.custom.stack || []).map(c => ({ id: c.id, type: "text", label: c.label, placeholder: "Tools…", custom: true })))
+    const questions = role.stackCategories.map(c => {
+      if (c.options) {
+        /* migrate a legacy free-text answer into the chip array */
+        const v = rs.stack[c.id];
+        if (typeof v === "string" && v.trim()) rs.stack[c.id] = [v.trim()];
+        return { id: c.id, type: "chips", label: c.label, options: c.options };
+      }
+      return { id: c.id, type: "text", label: c.label, placeholder: c.placeholder };
+    })
+      .concat((rs.custom.stack || []).map(c => {
+        const v = rs.stack[c.id];
+        if (typeof v === "string" && v.trim()) rs.stack[c.id] = [v.trim()];
+        return { id: c.id, type: "chips", label: c.label, options: [], custom: true };
+      }))
       .concat([
         { id: "ai_usage", type: "chips", label: "How are you currently using AI in this function?", options: role.aiUseCases },
         { id: "ai_requirement", type: "radio", label: "Is AI experience preferred or required?",
           options: ["Required", "Preferred", "Not important"] }
       ]);
     return {
-      title: "Tech Stack & AI", subtitle: "Ask them to list every tool they use.",
+      title: "Tech Stack", subtitle: "Ask them to list every tool they use.",
       questions,
       tips: [{ when: a => a.ai_requirement === "Required" && (a.ai_usage || []).length === 0,
         text: "AI experience is 'required' but they couldn't name current AI use cases — clarify what AI skill they'd actually test for." }],
@@ -691,19 +702,19 @@ function renderProfileCard(container) {
 
 function renderDeepDivesStep(main) {
   const role = activeRole();
-  if (!role) return needsRoleNotice(main, "Deep Dives");
+  if (!role) return needsRoleNotice(main, "Tech Stack");
 
-  main.appendChild(el("h2", null, "Deep Dives"));
+  main.appendChild(el("h2", null, "Tech Stack"));
   const rs = roleState();
   const musts = roleFocusAreas().filter(a => rs.areas[a.id].priority === "must");
   const nices = roleFocusAreas().filter(a => rs.areas[a.id].priority === "nice");
 
   if (!musts.length && !nices.length) {
-    main.appendChild(el("p", "subtitle", "No focus areas selected yet — go back one step and mark the must-haves. The relevant deep-dive questions will appear here automatically."));
-    return;
+    main.appendChild(el("p", "subtitle", "No focus areas selected yet — go back one step and mark the must-haves, and their skill drill-downs will appear here above the general tool questions."));
+  } else {
+    main.appendChild(el("p", "subtitle",
+      "Skill drill-downs selected by your focus-area choices — must-haves expanded, nice-to-haves collapsed — followed by the general tool questions."));
   }
-  main.appendChild(el("p", "subtitle",
-    "These question sets were selected by your focus-area choices. Must-haves get the full drill-down; nice-to-haves are collapsed — expand them if time allows."));
 
   [...musts, ...nices].forEach(area => {
     const isMust = rs.areas[area.id].priority === "must";
@@ -743,6 +754,21 @@ function renderDeepDivesStep(main) {
     }
   });
   main.appendChild(crossTips);
+
+  /* ---- general tool / platform questions (formerly their own step) ---- */
+  const stackDef = configStepDef("stack");
+  if (stackDef) {
+    main.appendChild(el("h3", "subhead", "🧰 Tools & Platforms"));
+    main.appendChild(el("p", "subtitle", esc(stackDef.subtitle)));
+    const qContainer = el("div", "questions");
+    const tipsContainer = el("div", "tips");
+    main.appendChild(qContainer);
+    main.appendChild(tipsContainer);
+    const refresh = () => renderTips(tipsContainer, stackDef.tips, stackDef.answers);
+    renderQuestions(qContainer, stackDef.questions, stackDef.answers, "stacksec", refresh);
+    if (stackDef.extra) stackDef.extra(qContainer);
+    refresh();
+  }
 }
 
 /* ---------- review + export ---------- */
@@ -817,7 +843,7 @@ function collectSummary() {
         if (line) lines.push(line);
       });
       if (lines.length) sections.push({
-        title: "Deep Dive: " + area.label + (prio === "must" ? " (must have)" : " (nice to have)"), lines });
+        title: area.label + (prio === "must" ? " (must have)" : " (nice to have)"), lines });
     });
     const stack = collectConfigSection(configStepDef("stack")); if (stack) sections.push(stack);
     const success = collectConfigSection(configStepDef("success")); if (success) sections.push(success);
@@ -1147,9 +1173,15 @@ function stepDone(w) {
     return def.questions.some(q => truthy(def.answers[q.id]));
   }
   if (w.kind === "allocator") return !!activeRole() && roleFocusAreas().some(a => roleState().areas[a.id].priority !== "skip");
-  if (w.kind === "deepdives") return !!activeRole() && roleFocusAreas().some(a =>
-    roleState().areas[a.id].priority !== "skip" &&
-    Object.keys(roleState().deepDives[a.id]).some(k => truthy(roleState().deepDives[a.id][k])));
+  if (w.kind === "deepdives") {
+    if (!activeRole()) return false;
+    const dd = roleFocusAreas().some(a =>
+      roleState().areas[a.id].priority !== "skip" &&
+      Object.keys(roleState().deepDives[a.id]).some(k => truthy(roleState().deepDives[a.id][k])));
+    const def = configStepDef("stack");
+    const st = !!def && def.questions.some(q => truthy(def.answers[q.id]));
+    return dd || st;
+  }
   return false;
 }
 function truthy(v) { return Array.isArray(v) ? v.length > 0 : !!(v && String(v).trim()); }
@@ -1158,6 +1190,8 @@ function render() {
   const app = document.getElementById("app");
   app.innerHTML = "";
   const steps = wizardSteps();
+  /* saved step indexes can exceed the step count after a layout change */
+  if (currentStep >= steps.length) currentStep = steps.length - 1;
 
   const side = el("nav", "sidebar");
   const brand = activeForm().brand;

@@ -246,9 +246,9 @@ const ROLES = {
         detail: "Target engineers comfortable owning cloud infra and scale. Distributed-systems depth is the filter." }
     ],
     stackCategories: [
-      { id: "db", label: "Databases", placeholder: "PostgreSQL, MongoDB, Redis…" },
-      { id: "cicd", label: "CI/CD & containers", placeholder: "Jenkins, GitHub Actions, Docker, K8s…" },
-      { id: "observability", label: "Observability", placeholder: "Datadog, Prometheus, Grafana…" }
+      { id: "db", label: "Databases", placeholder: "PostgreSQL, MongoDB, Redis…", options: ["PostgreSQL","MySQL","SQL Server","Oracle","MongoDB","Redis","DynamoDB","Elasticsearch"] },
+      { id: "cicd", label: "CI/CD & containers", placeholder: "Jenkins, GitHub Actions, Docker, K8s…", options: ["GitHub Actions","GitLab CI","Jenkins","Docker","Kubernetes","ArgoCD","Azure DevOps"] },
+      { id: "observability", label: "Observability", placeholder: "Datadog, Prometheus, Grafana…", options: ["Datadog","Prometheus / Grafana","New Relic","ELK / OpenSearch","Splunk","OpenTelemetry"] }
     ],
     aiUseCases: ["Code generation / completion", "Code review", "Test generation", "Debugging",
                  "Documentation", "Refactoring"],
@@ -348,9 +348,9 @@ const ROLES = {
         detail: "Target cloud-native data engineers. Pipeline reliability and the cloud data stack are the filters." }
     ],
     stackCategories: [
-      { id: "processing", label: "Processing / compute", placeholder: "Spark, Flink…" },
-      { id: "streaming", label: "Streaming", placeholder: "Kafka, Kinesis…" },
-      { id: "lang", label: "Languages", placeholder: "Python, SQL, Scala…" },
+      { id: "processing", label: "Processing / compute", placeholder: "Spark, Flink…", options: ["Spark","Databricks","Flink","dbt","Pandas","Snowpark"] },
+      { id: "streaming", label: "Streaming", placeholder: "Kafka, Kinesis…", options: ["Kafka","Kinesis","Pub/Sub","Flink","Spark Streaming"] },
+      { id: "lang", label: "Languages", placeholder: "Python, SQL, Scala…", options: ["Python","SQL","Scala","Java"] },
     ],
     aiUseCases: ["Pipeline / SQL generation", "Data documentation", "Anomaly detection",
                  "Code review", "Data-quality checks", "Schema mapping"],
@@ -460,8 +460,8 @@ const ROLES = {
         detail: "Target SRE titles. SLOs, incident response, and production reliability are the filters." }
     ],
     stackCategories: [
-      { id: "cloud", label: "Cloud", placeholder: "AWS, Azure, GCP…" },
-      { id: "scripting", label: "Scripting / languages", placeholder: "Bash, Python, Go…" }
+      { id: "cloud", label: "Cloud", placeholder: "AWS, Azure, GCP…", options: ["AWS","Azure","GCP","Multi-cloud","On-prem / hybrid"] },
+      { id: "scripting", label: "Scripting / languages", placeholder: "Bash, Python, Go…", options: ["Bash","Python","Go","PowerShell","TypeScript"] }
     ],
     aiUseCases: ["Pipeline / IaC generation", "Incident summarization", "Runbook generation",
                  "Log / anomaly analysis", "Config review", "Documentation"],
@@ -564,8 +564,8 @@ const ROLES = {
         detail: "Target applied-ML titles. End-to-end delivery on a cloud ML platform is the filter." }
     ],
     stackCategories: [
-      { id: "data", label: "Data / warehouse", placeholder: "Snowflake, Spark, BigQuery…" },
-      { id: "viz", label: "Notebooks / BI", placeholder: "Jupyter, Tableau, Streamlit…" }
+      { id: "data", label: "Data / warehouse", placeholder: "Snowflake, Spark, BigQuery…", options: ["Snowflake","BigQuery","Databricks","Spark","Redshift","PostgreSQL"] },
+      { id: "viz", label: "Notebooks / BI", placeholder: "Jupyter, Tableau, Streamlit…", options: ["Jupyter","Databricks Notebooks","Tableau","Power BI","Streamlit","Hex"] }
     ],
     aiUseCases: ["Model prototyping", "Code generation", "Data labeling / synthetic data",
                  "Literature / research assist", "Documentation", "Feature ideation"],
@@ -666,10 +666,10 @@ const ROLES = {
         detail: "Target implementation consultants and BAs. Full-lifecycle implementation experience is the filter." }
     ],
     stackCategories: [
-      { id: "integration", label: "Integration / middleware", placeholder: "MuleSoft, Boomi, PI/PO…" },
-      { id: "reporting", label: "Reporting / BI", placeholder: "SAP BW, Power BI, BI Publisher…" },
-      { id: "dev", label: "Development tools", placeholder: "ABAP, workflow, extensions…" },
-      { id: "pm", label: "Project / ALM tools", placeholder: "Solution Manager, Jira, ServiceNow…" }
+      { id: "integration", label: "Integration / middleware", placeholder: "MuleSoft, Boomi, PI/PO…", options: ["MuleSoft","Boomi","SAP PI/PO","Informatica","Workato","Custom APIs"] },
+      { id: "reporting", label: "Reporting / BI", placeholder: "SAP BW, Power BI, BI Publisher…", options: ["SAP BW","Power BI","BI Publisher","Tableau","Crystal Reports"] },
+      { id: "dev", label: "Development tools", placeholder: "ABAP, workflow, extensions…", options: ["ABAP","Workflow","BTP / extensions","PL/SQL","Power Platform"] },
+      { id: "pm", label: "Project / ALM tools", placeholder: "Solution Manager, Jira, ServiceNow…", options: ["Solution Manager","Jira","ServiceNow","Azure DevOps"] }
     ],
     aiUseCases: ["Report / query generation", "Configuration assistance", "Documentation",
                  "Test-case generation", "Data migration assist", "Requirements drafting"],
@@ -794,12 +794,12 @@ const ROLES = {
         detail: "Target Scrum Master / agile delivery titles. Certifications and team-health outcomes are the filters." }
     ],
     stackCategories: [
-      { id: "pm", label: "PM / ticketing", placeholder: "Jira, Azure DevOps, Asana…" },
-      { id: "roadmap", label: "Roadmapping", placeholder: "Aha!, Productboard, Jira Advanced Roadmaps…" },
-      { id: "docs", label: "Docs / collaboration", placeholder: "Confluence, Notion, SharePoint…" },
-      { id: "cicd", label: "Delivery / CI visibility", placeholder: "GitHub, GitLab, Jenkins dashboards…" },
-      { id: "reporting", label: "Reporting / analytics", placeholder: "Power BI, Jira dashboards…" },
-      { id: "resourcing", label: "Resourcing / time", placeholder: "Smartsheet, Float, Tempo…" }
+      { id: "pm", label: "PM / ticketing", placeholder: "Jira, Azure DevOps, Asana…", options: ["Jira","Azure DevOps","Asana","Monday","Smartsheet"] },
+      { id: "roadmap", label: "Roadmapping", placeholder: "Aha!, Productboard, Jira Advanced Roadmaps…", options: ["Aha!","Productboard","Jira Advanced Roadmaps","Roadmunk"] },
+      { id: "docs", label: "Docs / collaboration", placeholder: "Confluence, Notion, SharePoint…", options: ["Confluence","Notion","SharePoint","Google Workspace"] },
+      { id: "cicd", label: "Delivery / CI visibility", placeholder: "GitHub, GitLab, Jenkins dashboards…", options: ["GitHub","GitLab","Jenkins dashboards","Azure DevOps"] },
+      { id: "reporting", label: "Reporting / analytics", placeholder: "Power BI, Jira dashboards…", options: ["Power BI","Jira dashboards","Tableau","Excel"] },
+      { id: "resourcing", label: "Resourcing / time", placeholder: "Smartsheet, Float, Tempo…", options: ["Smartsheet","Float","Tempo","Harvest"] }
     ],
     aiUseCases: ["Status reporting", "Meeting summaries", "Risk analysis", "Resource planning",
                  "Documentation", "Estimate assistance"],
@@ -892,10 +892,10 @@ const ROLES = {
         detail: "Target applied-AI engineers who pair strong prompting/eval with app-building. Shipped GenAI features are the filter." }
     ],
     stackCategories: [
-      { id: "vectordb", label: "Vector DB / retrieval", placeholder: "Pinecone, pgvector, Weaviate…" },
-      { id: "mlops", label: "LLMOps / serving", placeholder: "LangSmith, Weights & Biases, Bedrock…" },
-      { id: "cloud", label: "Cloud / GPU", placeholder: "AWS, Azure, GCP, Modal, Replicate…" },
-      { id: "data", label: "Data / backend", placeholder: "Postgres, FastAPI, Redis…" }
+      { id: "vectordb", label: "Vector DB / retrieval", placeholder: "Pinecone, pgvector, Weaviate…", options: ["Pinecone","pgvector","Weaviate","Qdrant","Chroma","Elasticsearch / OpenSearch"] },
+      { id: "mlops", label: "LLMOps / serving", placeholder: "LangSmith, Weights & Biases, Bedrock…", options: ["LangSmith","Weights & Biases","AWS Bedrock","Azure OpenAI","vLLM","Modal"] },
+      { id: "cloud", label: "Cloud / GPU", placeholder: "AWS, Azure, GCP, Modal, Replicate…", options: ["AWS","Azure","GCP","Modal","Replicate","RunPod"] },
+      { id: "data", label: "Data / backend", placeholder: "Postgres, FastAPI, Redis…", options: ["PostgreSQL","FastAPI","Redis","Node","Supabase"] }
     ],
     aiUseCases: ["Code generation", "Eval automation", "Synthetic data generation",
                  "Prompt testing", "Documentation", "Research / literature review"],
@@ -979,10 +979,10 @@ const ROLES = {
         detail: "Target product engineers who own UI plus deployment. Front-end depth and shipping autonomy are the filters." }
     ],
     stackCategories: [
-      { id: "db", label: "Databases", placeholder: "PostgreSQL, MongoDB, Redis…" },
-      { id: "cloud", label: "Cloud / DevOps", placeholder: "AWS, Docker, GitHub Actions…" },
-      { id: "testing", label: "Testing", placeholder: "Jest, Playwright, Cypress…" },
-      { id: "build", label: "Build tools", placeholder: "Vite, Webpack, Turborepo…" }
+      { id: "db", label: "Databases", placeholder: "PostgreSQL, MongoDB, Redis…", options: ["PostgreSQL","MySQL","MongoDB","Redis","SQLite","DynamoDB","Supabase"] },
+      { id: "cloud", label: "Cloud / DevOps", placeholder: "AWS, Docker, GitHub Actions…", options: ["AWS","Azure","GCP","Docker","Kubernetes","GitHub Actions","Terraform"] },
+      { id: "testing", label: "Testing", placeholder: "Jest, Playwright, Cypress…", options: ["Jest","Vitest","Playwright","Cypress","Testing Library","JUnit"] },
+      { id: "build", label: "Build tools", placeholder: "Vite, Webpack, Turborepo…", options: ["Vite","Webpack","Turborepo","Nx","esbuild"] }
     ],
     aiUseCases: ["Code generation", "Code review", "Test generation", "Documentation", "Debugging"],
     metrics: ["Feature velocity", "Uptime", "Defect rate", "Core Web Vitals", "Test coverage", "Deployment frequency"],
@@ -1067,10 +1067,10 @@ const ROLES = {
         detail: "Target senior mobile engineers who own performance and release. Store track record is the filter." }
     ],
     stackCategories: [
-      { id: "backend", label: "Backend / API", placeholder: "REST, GraphQL, Firebase…" },
-      { id: "cicd", label: "CI/CD (mobile)", placeholder: "Fastlane, Bitrise, App Center…" },
-      { id: "testing", label: "Testing", placeholder: "XCTest, Espresso, Appium…" },
-      { id: "analytics", label: "Analytics / crash", placeholder: "Firebase, Crashlytics, Sentry…" }
+      { id: "backend", label: "Backend / API", placeholder: "REST, GraphQL, Firebase…", options: ["REST","GraphQL","Firebase","Supabase","WebSockets","gRPC"] },
+      { id: "cicd", label: "CI/CD (mobile)", placeholder: "Fastlane, Bitrise, App Center…", options: ["Fastlane","Bitrise","GitHub Actions","App Center","Codemagic"] },
+      { id: "testing", label: "Testing", placeholder: "XCTest, Espresso, Appium…", options: ["XCTest","Espresso","Appium","Detox","Maestro"] },
+      { id: "analytics", label: "Analytics / crash", placeholder: "Firebase, Crashlytics, Sentry…", options: ["Firebase Analytics","Crashlytics","Sentry","Amplitude","Mixpanel"] }
     ],
     aiUseCases: ["Code generation", "Test generation", "Documentation", "Crash analysis"],
     metrics: ["App store rating", "Crash-free rate", "App performance / load time", "Release cadence", "Adoption / retention"],
@@ -1157,12 +1157,12 @@ const ROLES = {
         detail: "Target architects who own security and cost. Landing zones and FinOps practice are the filters." }
     ],
     stackCategories: [
-      { id: "cloud", label: "Cloud platform", placeholder: "AWS, Azure, GCP…" },
-      { id: "iac", label: "IaC", placeholder: "Terraform, CloudFormation…" },
-      { id: "arch", label: "Architecture / diagramming", placeholder: "Lucidchart, draw.io, C4…" },
-      { id: "containers", label: "Containers / serverless", placeholder: "Kubernetes, Lambda…" },
-      { id: "security", label: "Security tools", placeholder: "IAM, CSPM, Wiz…" },
-      { id: "cost", label: "Cost / FinOps", placeholder: "Cost Explorer, CloudHealth…" }
+      { id: "cloud", label: "Cloud platform", placeholder: "AWS, Azure, GCP…", options: ["AWS","Azure","GCP","Multi-cloud","Hybrid / on-prem"] },
+      { id: "iac", label: "IaC", placeholder: "Terraform, CloudFormation…", options: ["Terraform","CloudFormation","Bicep","Pulumi","Ansible"] },
+      { id: "arch", label: "Architecture / diagramming", placeholder: "Lucidchart, draw.io, C4…", options: ["Lucidchart","draw.io","C4 model","Visio","Miro"] },
+      { id: "containers", label: "Containers / serverless", placeholder: "Kubernetes, Lambda…", options: ["Kubernetes","ECS / Fargate","Lambda","Azure Functions","Cloud Run"] },
+      { id: "security", label: "Security tools", placeholder: "IAM, CSPM, Wiz…", options: ["IAM","Wiz","Prisma Cloud","GuardDuty / Defender","CSPM"] },
+      { id: "cost", label: "Cost / FinOps", placeholder: "Cost Explorer, CloudHealth…", options: ["Cost Explorer","CloudHealth","Cloudability","Azure Cost Management","Kubecost"] }
     ],
     aiUseCases: ["Architecture assistance", "Documentation", "Cost analysis", "IaC generation"],
     metrics: ["Cost savings", "Availability / uptime", "Migration success", "Well-Architected score", "Time-to-provision", "Security posture"],
@@ -1264,11 +1264,11 @@ const ROLES = {
         detail: "Target GRC and identity-governance titles. Framework and audit experience are the filters." }
     ],
     stackCategories: [
-      { id: "cloud", label: "Cloud security", placeholder: "Wiz, Prisma, CSPM, IAM…" },
-      { id: "appsec", label: "AppSec (SAST/DAST)", placeholder: "Snyk, Checkmarx, Burp…" },
-      { id: "iam", label: "IAM", placeholder: "Okta, Entra ID, SailPoint…" },
-      { id: "vuln", label: "Vulnerability mgmt", placeholder: "Tenable, Qualys, Rapid7…" },
-      { id: "scripting", label: "Scripting", placeholder: "Python, PowerShell, Bash…" }
+      { id: "cloud", label: "Cloud security", placeholder: "Wiz, Prisma, CSPM, IAM…", options: ["Wiz","Prisma Cloud","Orca","AWS Security Hub","Microsoft Defender"] },
+      { id: "appsec", label: "AppSec (SAST/DAST)", placeholder: "Snyk, Checkmarx, Burp…", options: ["Snyk","Checkmarx","Veracode","Burp Suite","SonarQube","GitHub Advanced Security"] },
+      { id: "iam", label: "IAM", placeholder: "Okta, Entra ID, SailPoint…", options: ["Okta","Entra ID","SailPoint","CyberArk","Ping"] },
+      { id: "vuln", label: "Vulnerability mgmt", placeholder: "Tenable, Qualys, Rapid7…", options: ["Tenable","Qualys","Rapid7","CrowdStrike"] },
+      { id: "scripting", label: "Scripting", placeholder: "Python, PowerShell, Bash…", options: ["Python","PowerShell","Bash","KQL / SPL"] }
     ],
     aiUseCases: ["Threat detection", "Alert triage", "Code scanning", "Documentation", "Log analysis"],
     metrics: ["Vulnerabilities remediated", "MTTD", "MTTR", "Compliance posture", "Incidents", "Patch time", "False-positive rate"],
@@ -1355,9 +1355,9 @@ const ROLES = {
         detail: "Target QA analyst/lead titles. Test strategy and quality process are the filters." }
     ],
     stackCategories: [
-      { id: "management", label: "Test management", placeholder: "TestRail, Zephyr, Xray…" },
-      { id: "cicd", label: "CI/CD", placeholder: "Jenkins, GitHub Actions…" },
-      { id: "bugtracking", label: "Bug tracking", placeholder: "Jira, Azure DevOps…" }
+      { id: "management", label: "Test management", placeholder: "TestRail, Zephyr, Xray…", options: ["TestRail","Zephyr","Xray","qTest","Azure Test Plans"] },
+      { id: "cicd", label: "CI/CD", placeholder: "Jenkins, GitHub Actions…", options: ["Jenkins","GitHub Actions","GitLab CI","Azure DevOps","CircleCI"] },
+      { id: "bugtracking", label: "Bug tracking", placeholder: "Jira, Azure DevOps…", options: ["Jira","Azure DevOps","Linear","Bugzilla"] }
     ],
     aiUseCases: ["Test generation", "Test-data generation", "Bug triage", "Documentation", "Log analysis"],
     metrics: ["Defect detection rate", "Escaped defects", "Automation coverage %", "Test cycle time", "Release quality", "Flaky-test rate"],
@@ -1455,11 +1455,11 @@ const ROLES = {
         detail: "Target functional consultants named by cloud/module. That exact combo is the filter." }
     ],
     stackCategories: [
-      { id: "dev", label: "Dev tools", placeholder: "Apex, LWC, C# plugins…" },
-      { id: "integration", label: "Integration", placeholder: "MuleSoft, Boomi, REST APIs…" },
-      { id: "reporting", label: "Reporting / BI", placeholder: "CRM Analytics, Power BI, Tableau…" },
-      { id: "data", label: "Data tools", placeholder: "Data Loader, dataloader.io…" },
-      { id: "devops", label: "DevOps / release", placeholder: "Salesforce DX, Copado, Gearset…" }
+      { id: "dev", label: "Dev tools", placeholder: "Apex, LWC, C# plugins…", options: ["Apex","Lightning Web Components","C# plugins","Power Platform","JavaScript"] },
+      { id: "integration", label: "Integration", placeholder: "MuleSoft, Boomi, REST APIs…", options: ["MuleSoft","Boomi","REST APIs","Zapier","Middleware"] },
+      { id: "reporting", label: "Reporting / BI", placeholder: "CRM Analytics, Power BI, Tableau…", options: ["CRM Analytics","Power BI","Tableau","Native reports"] },
+      { id: "data", label: "Data tools", placeholder: "Data Loader, dataloader.io…", options: ["Data Loader","dataloader.io","Import Wizard","ETL tools"] },
+      { id: "devops", label: "DevOps / release", placeholder: "Salesforce DX, Copado, Gearset…", options: ["Salesforce DX","Copado","Gearset","Azure DevOps","Change sets"] }
     ],
     aiUseCases: ["Config assistance", "Code generation", "Report generation", "Documentation", "Data cleanup"],
     metrics: ["User adoption", "On-time delivery", "Data quality", "Automation / efficiency", "Defect rate", "Report usage"],

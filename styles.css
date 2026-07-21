@@ -249,6 +249,8 @@ body {
 
 h2 { margin: 0 0 6px; font-size: 26px; }
 .subtitle { margin: 0 0 20px; color: var(--muted); font-size: 15px; }
+/* sub-section heading inside a step (e.g. Tools & Platforms under Tech Stack) */
+h3.subhead { margin: 34px 0 6px; font-size: 19px; padding-top: 18px; border-top: 1px solid var(--line); }
 
 .coach {
   background: var(--accent-soft);

@@ -268,8 +268,8 @@ const ROLES = {
         detail: "Target content-marketing titles with SEO chops. Writing samples and organic-traffic wins are the screening filters." }
     ],
     stackCategories: [
-      { id: "crm", label: "CRM", placeholder: "Salesforce, HubSpot CRM…" },
-      { id: "creative", label: "Creative", placeholder: "Figma, Adobe CC, Canva…" }
+      { id: "crm", label: "CRM", placeholder: "Salesforce, HubSpot CRM…", options: ["Salesforce","HubSpot CRM","Dynamics 365","Zoho","Pipedrive"] },
+      { id: "creative", label: "Creative", placeholder: "Figma, Adobe CC, Canva…", options: ["Figma","Adobe Creative Cloud","Canva","CapCut"] }
     ],
     aiUseCases: ["Content creation", "Email drafting", "SEO optimization", "Paid ad optimization",
                  "Campaign reporting", "Personalization", "Image creation", "Workflow automation"],
@@ -381,10 +381,10 @@ const ROLES = {
         detail: "Target designers who've built or owned a system. Component libraries, tokens, and governance are the filters." }
     ],
     stackCategories: [
-      { id: "prototyping", label: "Prototyping", placeholder: "Figma, Framer, ProtoPie" },
-      { id: "handoff", label: "Handoff / dev", placeholder: "Figma Dev Mode, Zeplin, Storybook" },
-      { id: "analytics", label: "Product analytics", placeholder: "Amplitude, Hotjar, FullStory" },
-      { id: "collab", label: "Collaboration", placeholder: "FigJam, Miro, Notion" }
+      { id: "prototyping", label: "Prototyping", placeholder: "Figma, Framer, ProtoPie", options: ["Figma","Framer","ProtoPie","Principle","Axure"] },
+      { id: "handoff", label: "Handoff / dev", placeholder: "Figma Dev Mode, Zeplin, Storybook", options: ["Figma Dev Mode","Zeplin","Storybook"] },
+      { id: "analytics", label: "Product analytics", placeholder: "Amplitude, Hotjar, FullStory", options: ["Amplitude","Hotjar","FullStory","Mixpanel","GA4"] },
+      { id: "collab", label: "Collaboration", placeholder: "FigJam, Miro, Notion", options: ["FigJam","Miro","Notion","Confluence"] }
     ],
     aiUseCases: ["Design variations / ideation", "Research synthesis", "UX copy generation",
                  "Rapid prototyping", "Image / asset generation", "Summarizing user feedback"],
@@ -479,9 +479,9 @@ const ROLES = {
         detail: "Target ops-analyst titles. Attribution modeling and BI fluency are the filters." }
     ],
     stackCategories: [
-      { id: "data", label: "Data / CDP", placeholder: "Segment, Snowflake, ZoomInfo…" },
-      { id: "web", label: "CMS / landing pages", placeholder: "WordPress, Unbounce…" },
-      { id: "ads", label: "Ad platforms", placeholder: "Google Ads, LinkedIn…" }
+      { id: "data", label: "Data / CDP", placeholder: "Segment, Snowflake, ZoomInfo…", options: ["Segment","Snowflake","ZoomInfo","Clearbit","Census"] },
+      { id: "web", label: "CMS / landing pages", placeholder: "WordPress, Unbounce…", options: ["WordPress","Unbounce","Webflow","HubSpot CMS","Instapage"] },
+      { id: "ads", label: "Ad platforms", placeholder: "Google Ads, LinkedIn…", options: ["Google Ads","LinkedIn Ads","Meta Ads","Microsoft Ads"] }
     ],
     aiUseCases: ["Email drafting", "Subject-line optimization", "Segmentation", "Predictive lead scoring",
                  "Content generation", "Workflow suggestions", "Reporting summaries"],
@@ -577,11 +577,11 @@ const ROLES = {
         detail: "Target program manager titles. Multi-workstream and vendor governance are the filters." }
     ],
     stackCategories: [
-      { id: "roadmap", label: "Roadmapping", placeholder: "Aha!, Productboard, Roadmunk…" },
-      { id: "docs", label: "Docs / collaboration", placeholder: "Confluence, Notion, Google Workspace…" },
-      { id: "design", label: "Design / handoff", placeholder: "Figma, Miro…" },
-      { id: "analytics", label: "Analytics / reporting", placeholder: "GA4, Looker, Power BI…" },
-      { id: "resource", label: "Time / resourcing", placeholder: "Harvest, Float, Smartsheet…" }
+      { id: "roadmap", label: "Roadmapping", placeholder: "Aha!, Productboard, Roadmunk…", options: ["Aha!","Productboard","Roadmunk","Jira Advanced Roadmaps"] },
+      { id: "docs", label: "Docs / collaboration", placeholder: "Confluence, Notion, Google Workspace…", options: ["Confluence","Notion","Google Workspace","SharePoint"] },
+      { id: "design", label: "Design / handoff", placeholder: "Figma, Miro…", options: ["Figma","Miro","Adobe XD"] },
+      { id: "analytics", label: "Analytics / reporting", placeholder: "GA4, Looker, Power BI…", options: ["GA4","Looker","Power BI","Tableau"] },
+      { id: "resource", label: "Time / resourcing", placeholder: "Harvest, Float, Smartsheet…", options: ["Harvest","Float","Smartsheet","Monday"] }
     ],
     aiUseCases: ["Status reporting", "Meeting summaries", "Risk analysis", "Resource planning",
                  "Documentation", "Timeline / estimate assistance"],
@@ -698,8 +698,8 @@ const ROLES = {
         detail: "Target devs comfortable across the API boundary. SSR, BFF, and backend collaboration are the filters." }
     ],
     stackCategories: [
-      { id: "ci", label: "Version control / CI", placeholder: "GitHub Actions, GitLab CI…" },
-      { id: "hosting", label: "Hosting / cloud", placeholder: "Vercel, Netlify, AWS…" }
+      { id: "ci", label: "Version control / CI", placeholder: "GitHub Actions, GitLab CI…", options: ["GitHub Actions","GitLab CI","CircleCI","Azure DevOps"] },
+      { id: "hosting", label: "Hosting / cloud", placeholder: "Vercel, Netlify, AWS…", options: ["Vercel","Netlify","AWS","Cloudflare","Azure"] }
     ],
     aiUseCases: ["Code generation / completion", "Code review", "Test generation", "Debugging",
                  "Documentation", "Refactoring"],
@@ -828,8 +828,8 @@ const ROLES = {
         detail: "Target art directors who've adopted AI. Style ownership and brand consistency are the filters." }
     ],
     stackCategories: [
-      { id: "workflow", label: "Workflow / pipeline", placeholder: "ComfyUI, Automatic1111, APIs…" },
-      { id: "collab", label: "Collaboration / DAM", placeholder: "Figma, Frame.io, Notion…" }
+      { id: "workflow", label: "Workflow / pipeline", placeholder: "ComfyUI, Automatic1111, APIs…", options: ["ComfyUI","Automatic1111","APIs / scripting","Photoshop plugins"] },
+      { id: "collab", label: "Collaboration / DAM", placeholder: "Figma, Frame.io, Notion…", options: ["Figma","Frame.io","Notion","Google Drive","Air"] }
     ],
     aiUseCases: ["Concept / ideation", "Campaign creative", "Product / marketing visuals", "Storyboards",
                  "Style exploration", "Video generation", "Asset variations", "Personalized creative"],
@@ -937,8 +937,8 @@ const ROLES = {
         detail: "Target fast builders who wire APIs and LLMs into working demos. A portfolio of live projects is the filter." }
     ],
     stackCategories: [
-      { id: "ai", label: "AI / LLM APIs", placeholder: "Anthropic, OpenAI, LangChain…" },
-      { id: "automation", label: "Automation / glue", placeholder: "Zapier, n8n, Make…" }
+      { id: "ai", label: "AI / LLM APIs", placeholder: "Anthropic, OpenAI, LangChain…", options: ["Anthropic / Claude","OpenAI","Google Gemini","LangChain","Vercel AI SDK"] },
+      { id: "automation", label: "Automation / glue", placeholder: "Zapier, n8n, Make…", options: ["Zapier","n8n","Make","Retool","Airtable"] }
     ],
     aiUseCases: ["Building the app itself", "Prototyping features", "Debugging", "Refactoring",
                  "Writing tests", "Wiring integrations", "Generating UI", "Product ideation"],
@@ -1047,7 +1047,7 @@ const ROLES = {
         detail: "Target Dialogflow/Rasa/Lex builders. Intent modeling and an optimization track record are the filters." }
     ],
     stackCategories: [
-      { id: "data", label: "Data / vector store", placeholder: "Pinecone, pgvector, Elastic…" },
+      { id: "data", label: "Data / vector store", placeholder: "Pinecone, pgvector, Elastic…", options: ["Pinecone","pgvector","Elasticsearch","Weaviate","Redis"] },
     ],
     aiUseCases: ["The bot itself (core product)", "Intent generation", "Response drafting", "Test conversation generation",
                  "Summarizing transcripts", "Knowledge-base retrieval", "Sentiment analysis"],
@@ -1155,7 +1155,7 @@ const ROLES = {
         detail: "Target XR generalists who both build and model. Shipped end-to-end experiences are the filter." }
     ],
     stackCategories: [
-      { id: "sdk", label: "XR SDKs", placeholder: "OpenXR, ARKit, ARCore, MRTK…" },
+      { id: "sdk", label: "XR SDKs", placeholder: "OpenXR, ARKit, ARCore, MRTK…", options: ["OpenXR","ARKit","ARCore","MRTK","XR Interaction Toolkit","Meta XR SDK"] },
     ],
     aiUseCases: ["3D asset generation", "Code generation", "Environment / scene generation",
                  "NPC / interaction logic", "Texture generation", "Prototyping"],
