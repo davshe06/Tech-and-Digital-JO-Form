@@ -154,6 +154,7 @@ const ROLES = {
     label: "Software Engineer (Backend)",
     icon: "🖥️",
     tagline: "Services, APIs, data, and system design",
+    about: "Backend engineers build the server side of software — the APIs, business logic, and databases that power what users see. They design how systems store and move data, and keep services fast, secure, and reliable at scale.",
     blurb: "“Backend Engineer” spans CRUD-service work to distributed-systems architecture. The language and the system-design bar are the two biggest filters — pin where they'll spend 70–80% of their time and recruit for it.",
     timePrompt: "“If this engineer only had time to be exceptional at three things, what would they be — and roughly what percentage of the week does each take?”",
     focusAreas: [
@@ -272,6 +273,7 @@ const ROLES = {
     label: "Data Engineer",
     icon: "🧱",
     tagline: "Pipelines, warehouses, streaming, and modeling",
+    about: "Data engineers build the pipelines that collect, clean, and move data into warehouses where analysts and AI models can use it. Think of them as the plumbers of the data world — without them, dashboards and machine learning have nothing reliable to run on.",
     blurb: "Data engineering ranges from SQL-and-dbt analytics plumbing to real-time streaming at scale. The warehouse and the batch-vs-streaming split are the biggest filters — pin the 70–80%.",
     timePrompt: "“Between pipelines, warehousing, streaming, and modeling — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [
@@ -374,6 +376,7 @@ const ROLES = {
     label: "DevOps / SRE",
     icon: "♾️",
     tagline: "CI/CD, cloud, Kubernetes, and reliability",
+    about: "DevOps and Site Reliability Engineers keep software shipping and running: they automate build-and-deploy pipelines, manage cloud infrastructure, and respond when systems go down. The goal is fast releases without outages.",
     blurb: "DevOps and SRE overlap but aren't identical — one leans build/deploy automation, the other production reliability. Pin the cloud, the orchestration stack, and which side of that line the role sits on.",
     timePrompt: "“Where will this person spend most of the week — pipelines, infrastructure, reliability, observability? Roughly what percentage each?”",
     focusAreas: [
@@ -485,6 +488,7 @@ const ROLES = {
     label: "Data Scientist / ML Engineer",
     icon: "🤖",
     tagline: "Modeling, experimentation, and ML in production",
+    about: "Data scientists analyze data to find patterns and build predictive models — forecasting churn, detecting fraud, powering recommendations. ML engineers are the more software-focused variant who put those models into production systems.",
     blurb: "This title spans research-leaning data science to production ML engineering. The split between building models and shipping/serving them is the biggest filter — pin the 70–80%.",
     timePrompt: "“Between modeling, experimentation, data wrangling, and productionizing — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [
@@ -589,6 +593,7 @@ const ROLES = {
     label: "ERP Consultant / Analyst",
     icon: "🏢",
     tagline: "Platform, modules, implementation, and integrations",
+    about: "ERP (Enterprise Resource Planning) systems like SAP, Oracle, and Workday run a company's core operations — finance, HR, supply chain, payroll. ERP consultants configure, implement, and support these platforms, usually specializing in one platform and functional area.",
     blurb: "ERP roles are gated hard by platform and module — an SAP FICO consultant and a Workday HCM analyst don't cross-apply. Nail the exact platform and modules first; that's 80% of the search.",
     timePrompt: "“Across configuration, implementation, integrations, and support — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [
@@ -694,6 +699,7 @@ const ROLES = {
     label: "Technical Project / Program Manager",
     icon: "🗓️",
     tagline: "Delivery, agile, programs, and stakeholders",
+    about: "Technical project and program managers keep software initiatives on track — plans, budgets, risks, and coordination across engineering teams, often running agile/scrum ceremonies. Program managers oversee several related projects at once.",
     blurb: "This role ranges from a scrum-focused delivery lead running one team, to a Technical Program Manager (TPM) coordinating many teams toward a shared outcome. The methodology, the technical-depth bar, and the project-vs-program scope are the key filters — pin the 70–80%.",
     timePrompt: "“What three things will consume most of this PM's week — and roughly what percentage each?”",
     focusAreas: [
@@ -824,6 +830,7 @@ const ROLES = {
     label: "AI Engineer (GenAI / LLM)",
     icon: "🧠",
     tagline: "LLM apps, RAG, agents, and evaluation",
+    about: "AI engineers build applications on top of large language models like Claude or GPT — chat assistants, document analysis, autonomous agents. The craft is prompting, connecting models to company data (RAG), and making the outputs reliable enough for production.",
     blurb: "The newest and fastest-moving role — building with LLMs rather than training classical models. Pin whether it's application-building (RAG/agents), model work (fine-tuning), or platform/LLMOps. It overlaps with ML Engineering but the day-to-day is distinct.",
     timePrompt: "“Between LLM app development, retrieval, evaluation, and productionizing — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [
@@ -921,6 +928,7 @@ const ROLES = {
     label: "Full-Stack Developer",
     icon: "🧩",
     tagline: "Front-end, back-end, and everything between",
+    about: "Full-stack developers work across the whole application: the interface users see in the browser and the server logic and database behind it. They can ship a complete feature end to end, which makes them especially valuable to smaller teams and startups.",
     blurb: "'Full-stack' always has a center of gravity — few are equally deep on both ends. Find where they actually spend their time and which end matters most for this team.",
     timePrompt: "“What three things carry most of this developer's week across front-end, back-end, data, and infra — and roughly what percentage each?”",
     focusAreas: [
@@ -1005,6 +1013,7 @@ const ROLES = {
     label: "Mobile Developer",
     icon: "📱",
     tagline: "Native, cross-platform, and app delivery",
+    about: "Mobile developers build apps for phones and tablets — natively for iPhone (Swift) or Android (Kotlin), or with cross-platform frameworks like React Native and Flutter that share one codebase. They handle app-store releases, device quirks, and mobile performance.",
     blurb: "Mobile splits sharply by platform — iOS, Android, or cross-platform — and those pools barely overlap. Pin the platform and whether it's native or cross-platform first.",
     timePrompt: "“Where will this developer spend most of the week — platform code, UI, integration, performance? Roughly what percentage each?”",
     focusAreas: [
@@ -1093,6 +1102,7 @@ const ROLES = {
     label: "Cloud Architect",
     icon: "☁️",
     tagline: "Cloud platform, solutions, migration, and cost",
+    about: "Cloud architects design a company's overall cloud setup on AWS, Azure, or GCP — which services to use, how they fit together, and how to keep it secure and cost-effective. It's a senior, big-picture role that guides the engineers doing the hands-on build.",
     blurb: "A Cloud Architect designs the target state and the path to it. Cloud-platform depth and whether the role is design-only vs. hands-on are the key filters — plus certifications, which the market takes seriously here.",
     timePrompt: "“Between platform architecture, solutioning, migration, security, and cost — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [
@@ -1185,6 +1195,7 @@ const ROLES = {
     label: "Security Engineer",
     icon: "🔒",
     tagline: "AppSec, cloud, SecOps, IAM, and compliance",
+    about: "Security engineers protect a company's systems and data from attack — securing code and cloud environments, managing who can access what, monitoring for threats, and meeting compliance standards like SOC 2 or HIPAA.",
     blurb: "Security spans offensive, defensive, cloud, and governance — a pentester and a GRC analyst share a title but not a skill set. Pin the security domain first; it's most of the search.",
     timePrompt: "“Across app security, cloud security, operations, and compliance — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [
@@ -1291,6 +1302,7 @@ const ROLES = {
     label: "QA / Test Engineer",
     icon: "✅",
     tagline: "Automation, manual, performance, and quality",
+    about: "QA / Test engineers make sure software works before customers see it. Modern QA is mostly automation — writing code that tests the product continuously (Selenium, Playwright, Cypress) — alongside manual and performance testing.",
     blurb: "QA spans hands-on manual testing to full SDET automation engineering. The automation-vs-manual split and the tech stack are the biggest filters — pin the 70–80%.",
     timePrompt: "“Between test automation, manual/exploratory, API, and performance testing — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [
@@ -1380,6 +1392,7 @@ const ROLES = {
     label: "CRM Developer / Consultant",
     icon: "🔷",
     tagline: "Salesforce, Dynamics, and CRM platforms",
+    about: "CRM developers and consultants customize platforms like Salesforce and Dynamics 365 that companies use to manage sales and customer service. They build the custom features, automations, and integrations that make the CRM fit how the business actually works.",
     blurb: "CRM work is gated by platform (Salesforce vs. Dynamics vs. HubSpot) and by the config-vs-code split. An admin, a developer, and a functional consultant share the space but not the skill set. Pin platform + clouds first.",
     timePrompt: "“Between configuration, development, integration, and reporting — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [

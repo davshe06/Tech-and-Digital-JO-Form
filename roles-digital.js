@@ -148,6 +148,7 @@ const ROLES = {
     label: "Digital Marketing Manager",
     icon: "📈",
     tagline: "Full-funnel marketing generalist or channel lead",
+    about: "A Digital Marketing Manager owns a company's online marketing — paid ads, email, SEO, social, and the analytics that tie it all to revenue. The exact mix varies enormously by company, which is why this intake pins down where they'll actually spend their time.",
     blurb: "“Digital Marketing Manager” can mean 10 different jobs depending on the company — the intake matters more than the job description. Identify where they'll spend 70–80% of their time, then recruit around those core competencies.",
     timePrompt: "“If this person only had time to be exceptional at three things, what would those three things be — and roughly what percentage of their job would each represent?”",
     focusAreas: [
@@ -294,6 +295,7 @@ const ROLES = {
     label: "UX Designer / Researcher",
     icon: "🎨",
     tagline: "Product design, interaction, and user research",
+    about: "UX designers shape how digital products look, feel, and flow — from researching users to wireframes to polished interfaces, usually in Figma. Dedicated researchers focus on studying users; designers focus on crafting the experience.",
     blurb: "“UX Designer” spans pure research to pixel-level UI. Pin down where on the research↔design spectrum this role sits, and whether they own the whole product or one slice. Aim to identify the 70–80% of the week and recruit for it.",
     timePrompt: "“If this person only had time to be exceptional at three things across research and design, what would they be — and roughly what share of the week does each take?”",
     focusAreas: [
@@ -411,6 +413,7 @@ const ROLES = {
     label: "Marketing Automation Specialist",
     icon: "⚙️",
     tagline: "Platform ops, journeys, lead management, and data",
+    about: "Marketing automation specialists run platforms like HubSpot and Marketo that send automated email journeys, score leads, and hand the best ones to sales. It's the operational engine behind modern marketing — part marketer, part systems administrator.",
     blurb: "Automation roles live and die by the platform and the data behind it. Pin the exact platform, how deep the admin/ops work goes, and whether this is a builder, a strategist, or a data-plumbing role. Recruit for the 70–80%.",
     timePrompt: "“Between platform ops, campaign building, data, and reporting — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [
@@ -508,6 +511,7 @@ const ROLES = {
     label: "Digital Project Manager",
     icon: "🗓️",
     tagline: "Delivery, agile, stakeholders, and budgets",
+    about: "Digital project managers keep website, app, and campaign projects on schedule and on budget — coordinating designers, developers, clients, and vendors. Many also run agile/scrum delivery processes for their teams.",
     blurb: "A Digital PM can be a scrum-focused delivery lead, a client-facing account-style PM, or a program manager juggling budgets. Pin the methodology, who they answer to, and what they're accountable for. Recruit for the 70–80%.",
     timePrompt: "“What three things will consume most of this PM's week — and roughly what percentage each?”",
     focusAreas: [
@@ -609,6 +613,7 @@ const ROLES = {
     label: "Front-End Developer",
     icon: "💻",
     tagline: "Framework, UI engineering, performance, and integration",
+    about: "Front-end developers build the part of a website or web app that users see and interact with, using JavaScript frameworks like React. They turn designs into fast, responsive, accessible interfaces in the browser.",
     blurb: "“Front-End Developer” ranges from markup-and-styling to full JS engineering with SSR and APIs. Pin the framework, the TypeScript bar, and how close to design vs. backend the role sits. Recruit for the 70–80%.",
     timePrompt: "“Where will this developer spend most of the week — framework work, styling/UI, performance, integration? Roughly what percentage each?”",
     focusAreas: [
@@ -729,6 +734,7 @@ const ROLES = {
     label: "GenAI Artist",
     icon: "🖼️",
     tagline: "Generative image, video, and concept art with AI tooling",
+    about: "GenAI artists create images, video, and other visuals using AI tools like Midjourney and Stable Diffusion. The skill is directing the AI — prompting, keeping characters and brand style consistent — then finishing the output with traditional tools like Photoshop.",
     blurb: "“GenAI Artist” spans marketing creative, concept art, product visuals, and full motion — and the tool stack changes the pool completely. Pin the primary tools, whether they train/fine-tune models, and how much traditional craft (Photoshop, compositing, art direction) the role still needs. Recruit for the 70–80%.",
     timePrompt: "“If this artist only had time to be exceptional at three things across generation, editing, and direction, what would they be — and roughly what share of the week does each take?”",
     focusAreas: [
@@ -860,6 +866,7 @@ const ROLES = {
     label: "Vibe Coder",
     icon: "🛠️",
     tagline: "AI-native builder shipping fast with agentic coding tools",
+    about: "A vibe coder builds software by directing AI coding tools (Cursor, Claude Code, v0) rather than hand-writing most of the code — turning ideas into working apps extremely fast. The best pair strong product instincts with enough engineering judgment to keep the AI's output solid.",
     blurb: "A “Vibe Coder” builds and ships with AI coding tools (Cursor, Claude Code, v0, Lovable, Replit) far faster than a traditional dev — but the depth ranges from polished prototyper to production engineer. Pin how far the output has to go (throwaway demo vs. production) and how much real engineering judgment the role needs. Recruit for the 70–80%.",
     timePrompt: "“What will this builder actually spend the week doing — prototyping, shipping features, product/design, wiring integrations? Roughly what percentage each?”",
     focusAreas: [
@@ -970,6 +977,7 @@ const ROLES = {
     label: "Chatbot Developer / Designer",
     icon: "💬",
     tagline: "Conversational AI, assistants, and LLM-powered agents",
+    about: "Chatbot developers and designers build conversational AI — customer-service bots, virtual assistants, and voice agents. Today that usually means LLM-powered assistants connected to company knowledge and systems; the design side crafts the conversation flows and personality.",
     blurb: "This role swings from conversation design (the words and flows) to engineering (NLU, LLMs, integrations) — and a modern “chatbot” usually means an LLM agent, not an intent tree. Pin whether the client needs a designer, an engineer, or a hybrid, and whether it's classic NLU or GenAI. Recruit for the 70–80%.",
     timePrompt: "“Between conversation design, AI/NLU engineering, integrations, and optimization — what three things carry the week, and roughly what percentage each?”",
     focusAreas: [
@@ -1080,6 +1088,7 @@ const ROLES = {
     label: "VR / AR Designer / Developer",
     icon: "🥽",
     tagline: "Immersive, spatial, and mixed-reality experiences",
+    about: "VR/AR developers and designers build immersive experiences for headsets like Meta Quest and Apple Vision Pro, and phone-based augmented reality — games, training simulations, product visualization. Most build in Unity or Unreal; designers focus on spatial UX.",
     blurb: "Immersive roles split between design (spatial UX, interaction) and development (Unity/Unreal engineering), across very different hardware (Quest, Vision Pro, mobile AR, HoloLens). Pin the engine, the target device, and whether this is a designer, a developer, or a hybrid. Recruit for the 70–80%.",
     timePrompt: "“Across engine work, interaction/spatial design, 3D assets, and optimization — what three things carry most of the week, and roughly what percentage each?”",
     focusAreas: [

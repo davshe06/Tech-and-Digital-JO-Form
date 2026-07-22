@@ -1319,6 +1319,18 @@ function render() {
    focus); it just updates state and autosaves. */
 function renderNotesPanel(app) {
   const panel = el("aside", "notes-panel");
+
+  /* plain-language explainer of the selected role, for reps outside the domain */
+  const role = activeRole();
+  if (role && role.about) {
+    const box = el("div", "role-about");
+    /* "an" before vowel-sounding starts (ERP, AI) — U reads as "you", so "a UX" */
+    const article = /^[AEIO]/.test(role.label) ? "an" : "a";
+    box.appendChild(el("div", "role-about-title", role.icon + " What is " + article + " " + esc(role.label) + "?"));
+    box.appendChild(el("p", "role-about-text", esc(role.about)));
+    panel.appendChild(box);
+  }
+
   panel.appendChild(el("div", "notes-head", "🗒️ Notes"));
   panel.appendChild(el("p", "notes-sub", "Kept across every step and added to the exported job order."));
   panel.appendChild(notesField("Job description / pre-meeting info", "pretext",

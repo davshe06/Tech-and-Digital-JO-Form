@@ -337,6 +337,15 @@ h3.subhead { margin: 34px 0 6px; font-size: 19px; padding-top: 18px; border-top:
   flex-direction: column;
   gap: 14px;
 }
+.role-about {
+  background: var(--accent-soft);
+  border: 1px solid var(--tip-line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.role-about-title { font-weight: 700; font-size: 13px; margin-bottom: 5px; }
+.role-about-text { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+
 .notes-head { font-weight: 700; font-size: 15px; }
 .notes-sub { margin: -8px 0 2px; font-size: 12px; color: var(--muted); line-height: 1.4; }
 .notes-block { display: flex; flex-direction: column; gap: 6px; }
