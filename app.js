@@ -1280,7 +1280,7 @@ function render() {
 
   /* Tech / Digital form toggle — switches to a fully separate job order */
   const formBar = el("div", "form-toggle");
-  formBar.appendChild(el("span", "form-toggle-label", "Job order type"));
+  formBar.appendChild(el("span", "form-toggle-label", "HSJF Job Order Type"));
   const seg = el("div", "form-seg");
   FORM_ORDER.forEach(id => {
     const btn = el("button", "form-seg-btn" + (store.formId === id ? " active" : ""), FORMS[id].label);
