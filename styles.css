@@ -200,7 +200,8 @@ body {
 /* ---------- main panel ---------- */
 
 .panel {
-  flex: 1;
+  /* claim the comfortable form width first; the notes rail gets the rest */
+  flex: 1 1 860px;
   max-width: 860px;
   padding: 36px 44px 80px;
 }
@@ -324,8 +325,9 @@ h3.subhead { margin: 34px 0 6px; font-size: 19px; padding-top: 18px; border-top:
 /* ---------- persistent notes rail ---------- */
 
 .notes-panel {
-  width: 320px;
-  flex-shrink: 0;
+  /* fill whatever width remains after the sidebar and the capped main panel */
+  flex: 1 1 320px;
+  min-width: 320px;
   position: sticky;
   top: 0;
   height: 100vh;
@@ -363,10 +365,8 @@ h3.subhead { margin: 34px 0 6px; font-size: 19px; padding-top: 18px; border-top:
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 9px 11px;
-  resize: both;
+  resize: vertical;
   min-height: 380px;
-  min-width: 240px;
-  max-width: 58vw;
 }
 .notes-panel textarea:focus {
   outline: none;
