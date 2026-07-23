@@ -544,6 +544,7 @@ function drawCloseNext(host) {
   const cn = closeNextState();
   host.appendChild(el("h3", "subhead", "🤝 Close To The Next Steps"));
   host.appendChild(el("p", "subtitle", "How are we closing this? Pick the path, then lock in the date and time for each step."));
+  host.appendChild(el("p", "close-next-reminder", "Remind the client: These candidates are pre-vetted by experienced specialist recruiters and this skillset is in high demand. A proven, condensed process improves your likelihood of hiring the right person and not losing them to another company."));
 
   const group = el("div", "chip-group");
   CLOSE_PATHS.forEach(p => {

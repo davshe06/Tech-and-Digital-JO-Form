@@ -424,6 +424,16 @@ textarea { resize: vertical; }
 
 /* Close To The Next Steps scheduler */
 .close-next { margin-top: 8px; }
+.close-next-reminder {
+  font-weight: 700;
+  margin: -8px 0 16px;
+  padding: 11px 14px;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
 .close-next .chip-group { margin-bottom: 6px; }
 .sched-block { display: flex; flex-direction: column; gap: 12px; }
 .sched-row {
