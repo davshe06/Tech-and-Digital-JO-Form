@@ -500,7 +500,7 @@ const CLOSE_PATHS = [
   { id: "direct_start", label: "Direct Start", sched: "single" },
   { id: "resume_review", label: "Resume / Portfolio Review", sched: "single" },
   { id: "working_interview", label: "Working Interview", sched: "single" },
-  { id: "icm_pending", label: "ICM with Pending Start Date", sched: "range" },
+  { id: "icm_pending", label: "ICM with Pending Start Date", sched: "days" },
   { id: "icms", label: "ICMs", sched: "icms" }
 ];
 const CLOSE_MAINS = ["direct_start", "working_interview", "icm_pending", "icms"];
@@ -594,6 +594,7 @@ function timeField(obj, key, labelTxt) {
 
 function buildScheduler(p, cn) {
   const sc = cn.schedules[p.id] || (cn.schedules[p.id] = {});
+  if (p.sched === "days") return buildDayWindows(sc, esc(p.label) + " — propose two days", false);
   const row = el("div", "sched-row");
   row.appendChild(el("div", "sched-label", esc(p.label)));
   const controls = el("div", "sched-controls");
@@ -639,7 +640,7 @@ function buildIcmsBlock(cn, host) {
   if (cn.icm_count) {
     for (let i = 0; i < cn.icm_count; i++) {
       const sc = cn.icms[i] || (cn.icms[i] = { date: "", start: "", end: "" });
-      if (i === 0) { box.appendChild(buildIcm1(sc)); continue; }
+      if (i === 0) { box.appendChild(buildDayWindows(sc, "ICM #1 — propose two days", true)); continue; }
       const row = el("div", "sched-row indented");
       row.appendChild(el("div", "sched-label", "ICM #" + (i + 1)));
       const controls = el("div", "sched-controls");
@@ -654,9 +655,10 @@ function buildIcmsBlock(cn, host) {
   return box;
 }
 
-/* ICM #1 offers two candidate days, each with two proposed time windows.
-   Its richer shape (sc.days) is migrated from the plain {date,start,end}. */
-function ensureIcm1Days(sc) {
+/* A "day/window" scheduler offers two candidate days, each with two proposed
+   time windows. Shared by ICM #1 and ICM with Pending Start Date. The richer
+   shape (sc.days) is migrated from any plain {date,start,end}. */
+function ensureDayWindows(sc) {
   if (!Array.isArray(sc.days)) {
     sc.days = [
       { date: sc.date || "", ranges: [{ start: sc.start || "", end: sc.end || "" }, { start: "", end: "" }] },
@@ -671,12 +673,12 @@ function ensureIcm1Days(sc) {
   return sc.days;
 }
 
-function buildIcm1(sc) {
-  const days = ensureIcm1Days(sc);
-  const block = el("div", "sched-block icm1-block indented");
-  block.appendChild(el("div", "sched-label", "ICM #1 — propose two days"));
+function buildDayWindows(sc, title, indent) {
+  const days = ensureDayWindows(sc);
+  const block = el("div", "sched-block daywin-block" + (indent ? " indented" : ""));
+  block.appendChild(el("div", "sched-label", title));
   days.forEach((d, di) => {
-    const row = el("div", "sched-row icm1-day");
+    const row = el("div", "sched-row daywin-day");
     row.appendChild(el("div", "sched-sublabel", "Day " + (di + 1)));
     const controls = el("div", "sched-controls");
     controls.appendChild(dateField(d, "date"));
@@ -722,9 +724,11 @@ function fmtWhen(sc, kind) {
   return [date, fmtTime(sc.time)].filter(Boolean).join(" at ");
 }
 
-/* ICM #1 export lines — one per proposed day, listing its filled windows. */
-function icm1Lines(sc) {
-  const days = ensureIcm1Days(sc);
+/* Day/window export lines — one per proposed day, listing its filled windows.
+   `prefix` labels the lines (e.g. "ICM #1" or the pending-start path label). */
+function dayWindowLines(sc, prefix, indent) {
+  const days = ensureDayWindows(sc);
+  const pad = indent ? "  " : "";
   const out = [];
   days.forEach((d, di) => {
     const date = fmtDate(d.date);
@@ -733,7 +737,8 @@ function icm1Lines(sc) {
       .filter(Boolean);
     if (!date && !windows.length) return;
     const val = [date, windows.join(", ")].filter(Boolean).join(" — ");
-    out.push({ label: "  ICM #1 · Day " + (di + 1), value: val, id: "close_icm1_day" + di });
+    const key = prefix.replace(/[^a-z0-9]+/gi, "_").toLowerCase();
+    out.push({ label: pad + prefix + " · Day " + (di + 1), value: val, id: "close_" + key + "_day" + di });
   });
   return out;
 }
@@ -751,7 +756,7 @@ function closeNextLines() {
       lines.push({ label: "ICMs", value: n ? n + " scheduled" : "count not set", id: "close_icms" });
       (cn.icms || []).slice(0, n).forEach((sc, i) => {
         if (i === 0) {
-          const l1 = icm1Lines(sc);
+          const l1 = dayWindowLines(sc, "ICM #1", true);
           if (l1.length) lines.push(...l1);
           else lines.push({ label: "  ICM #1", value: "date/time not set", id: "close_icm_0" });
           return;
@@ -759,6 +764,11 @@ function closeNextLines() {
         const when = fmtWhen(sc, "range");
         lines.push({ label: "  ICM #" + (i + 1), value: when || "date/time not set", id: "close_icm_" + i });
       });
+    } else if (p.sched === "days") {
+      const sc = (cn.schedules || {})[p.id] || {};
+      const dl = dayWindowLines(sc, p.label, false);
+      if (dl.length) lines.push(...dl);
+      else lines.push({ label: p.label, value: "date/time not set", id: "close_" + p.id });
     } else {
       const sc = (cn.schedules || {})[p.id] || {};
       const when = fmtWhen(sc, p.sched);
