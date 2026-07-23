@@ -639,6 +639,7 @@ function buildIcmsBlock(cn, host) {
   if (cn.icm_count) {
     for (let i = 0; i < cn.icm_count; i++) {
       const sc = cn.icms[i] || (cn.icms[i] = { date: "", start: "", end: "" });
+      if (i === 0) { box.appendChild(buildIcm1(sc)); continue; }
       const row = el("div", "sched-row indented");
       row.appendChild(el("div", "sched-label", "ICM #" + (i + 1)));
       const controls = el("div", "sched-controls");
@@ -651,6 +652,48 @@ function buildIcmsBlock(cn, host) {
     }
   }
   return box;
+}
+
+/* ICM #1 offers two candidate days, each with two proposed time windows.
+   Its richer shape (sc.days) is migrated from the plain {date,start,end}. */
+function ensureIcm1Days(sc) {
+  if (!Array.isArray(sc.days)) {
+    sc.days = [
+      { date: sc.date || "", ranges: [{ start: sc.start || "", end: sc.end || "" }, { start: "", end: "" }] },
+      { date: "", ranges: [{ start: "", end: "" }, { start: "", end: "" }] }
+    ];
+  }
+  while (sc.days.length < 2) sc.days.push({ date: "", ranges: [] });
+  sc.days.forEach(d => {
+    if (!Array.isArray(d.ranges)) d.ranges = [];
+    while (d.ranges.length < 2) d.ranges.push({ start: "", end: "" });
+  });
+  return sc.days;
+}
+
+function buildIcm1(sc) {
+  const days = ensureIcm1Days(sc);
+  const block = el("div", "sched-block icm1-block indented");
+  block.appendChild(el("div", "sched-label", "ICM #1 — propose two days"));
+  days.forEach((d, di) => {
+    const row = el("div", "sched-row icm1-day");
+    row.appendChild(el("div", "sched-sublabel", "Day " + (di + 1)));
+    const controls = el("div", "sched-controls");
+    controls.appendChild(dateField(d, "date"));
+    d.ranges.forEach((r, ri) => {
+      const grp = el("div", "sched-window");
+      grp.appendChild(el("span", "sched-window-lab", "Window " + (ri + 1)));
+      const inner = el("div", "sched-range");
+      inner.appendChild(timeField(r, "start", "Start"));
+      inner.appendChild(el("span", "sched-dash", "–"));
+      inner.appendChild(timeField(r, "end", "End"));
+      grp.appendChild(inner);
+      controls.appendChild(grp);
+    });
+    row.appendChild(controls);
+    block.appendChild(row);
+  });
+  return block;
 }
 
 /* ---- Close-plan formatting for exports ---- */
@@ -679,6 +722,22 @@ function fmtWhen(sc, kind) {
   return [date, fmtTime(sc.time)].filter(Boolean).join(" at ");
 }
 
+/* ICM #1 export lines — one per proposed day, listing its filled windows. */
+function icm1Lines(sc) {
+  const days = ensureIcm1Days(sc);
+  const out = [];
+  days.forEach((d, di) => {
+    const date = fmtDate(d.date);
+    const windows = (d.ranges || [])
+      .map(r => [fmtTime(r.start), fmtTime(r.end)].filter(Boolean).join("–"))
+      .filter(Boolean);
+    if (!date && !windows.length) return;
+    const val = [date, windows.join(", ")].filter(Boolean).join(" — ");
+    out.push({ label: "  ICM #1 · Day " + (di + 1), value: val, id: "close_icm1_day" + di });
+  });
+  return out;
+}
+
 /* Returns [{label,value}] lines for the close plan, or [] if nothing set. */
 function closeNextLines() {
   const c = state.common.closing;
@@ -691,6 +750,12 @@ function closeNextLines() {
       const n = cn.icm_count || 0;
       lines.push({ label: "ICMs", value: n ? n + " scheduled" : "count not set", id: "close_icms" });
       (cn.icms || []).slice(0, n).forEach((sc, i) => {
+        if (i === 0) {
+          const l1 = icm1Lines(sc);
+          if (l1.length) lines.push(...l1);
+          else lines.push({ label: "  ICM #1", value: "date/time not set", id: "close_icm_0" });
+          return;
+        }
         const when = fmtWhen(sc, "range");
         lines.push({ label: "  ICM #" + (i + 1), value: when || "date/time not set", id: "close_icm_" + i });
       });
