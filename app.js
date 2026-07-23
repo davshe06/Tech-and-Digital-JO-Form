@@ -533,7 +533,9 @@ function toggleClosePath(cn, id, on) {
 
 function renderCloseNext(container) {
   const host = el("div", "close-next");
-  container.appendChild(host);
+  /* sits at the top of the Closing step, in place of the old interview
+     process question */
+  container.insertBefore(host, container.firstChild);
   drawCloseNext(host);
 }
 
@@ -1336,7 +1338,6 @@ function renderReviewStep(main) {
     { ok: musts.length >= 1 && musts.length <= 3, text: "1–3 must-have focus areas selected" },
     { ok: total === 100, text: "Time allocation totals 100%" },
     { ok: !!(rs && (rs.success.success_6_12 || "").trim()), text: "6–12 month success definition captured" },
-    { ok: !!(state.common.closing.interview_process || "").trim(), text: "Interview process captured" },
     { ok: closeNextLines().length > 0, text: "Close-to-next-steps path selected" }
   ];
   const list = el("div", "checklist");

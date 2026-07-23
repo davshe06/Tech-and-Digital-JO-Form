@@ -109,8 +109,6 @@ const COMMON = {
     title: "Closing Questions",
     subtitle: "Lock in the process before you hang up.",
     questions: [
-      { id: "interview_process", type: "textarea", label: "What does the interview process look like?",
-        placeholder: "Rounds, interviewers, assessments, timeline to decision" },
       { id: "portfolio_or_test", type: "text", label: "Portfolio, code test, or assignment required?",
         placeholder: "e.g., portfolio review, take-home exercise, live coding" },
       { id: "computer_provided", type: "radio", label: "Computer provided by…",
@@ -127,10 +125,7 @@ const COMMON = {
       { id: "next_steps", type: "textarea", label: "Agreed next steps",
         placeholder: "When you'll send candidates, follow-up call scheduled…" }
     ],
-    tips: [
-      { when: a => (a.interview_process || "").split(/round|step|stage|interview/i).length > 5,
-        text: "Long interview process — set expectations now: in this market, strong digital talent is gone in 1–2 weeks." }
-    ]
+    tips: []
   }
 };
 

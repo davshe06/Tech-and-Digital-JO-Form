@@ -114,8 +114,6 @@ const COMMON = {
     title: "Closing Questions",
     subtitle: "Lock in the process before you hang up.",
     questions: [
-      { id: "interview_process", type: "textarea", label: "What does the interview process look like?",
-        placeholder: "Rounds, interviewers, timeline to decision" },
       { id: "tech_assessment", type: "text", label: "Technical assessment involved?",
         placeholder: "e.g., take-home, live coding, system design, pair programming, none" },
       { id: "computer_provided", type: "radio", label: "Computer provided by…",
@@ -133,8 +131,6 @@ const COMMON = {
         placeholder: "When you'll send candidates, follow-up call scheduled…" }
     ],
     tips: [
-      { when: a => (a.interview_process || "").split(/round|step|stage|interview|loop/i).length > 5,
-        text: "Long interview loop — set expectations now: strong engineers in this market are gone in 1–2 weeks and often hold multiple offers." },
       { when: a => /take-?home/i.test(a.tech_assessment || ""),
         text: "Take-home assessments cause drop-off among senior candidates — confirm the time expectation and whether it's skippable for strong profiles." }
     ]
