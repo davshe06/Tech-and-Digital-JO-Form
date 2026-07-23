@@ -217,7 +217,7 @@ function stepTitle(w) {
 function configStepDef(key) {
   const role = activeRole();
   if (key === "logistics") return Object.assign({}, activeForm().common.logistics, { answers: state.common.logistics });
-  if (key === "closing")   return Object.assign({}, activeForm().common.closing,   { answers: state.common.closing });
+  if (key === "closing")   return Object.assign({}, activeForm().common.closing,   { answers: state.common.closing, extra: (c) => renderCloseNext(c) });
   if (key === "team") {
     const qs = activeForm().common.team.questions.map(q =>
       q.id === "specialists" ? Object.assign({}, q, { options: role ? role.specialists.map(s => s.label) : [] }) : q);
@@ -488,6 +488,215 @@ function renderTips(container, rules, answers) {
     try { show = !!rule.when(answers, state); } catch (e) {}
     if (show) container.appendChild(el("div", "tip", "💡 " + esc(rule.text)));
   });
+}
+
+/* ---------- Close To The Next Steps (closing-step scheduler) ----------
+   Bubble selectors for the close path. The four "main" paths are mutually
+   exclusive; Resume/Portfolio Review can ride alongside any one of them.
+   Selecting a path reveals its scheduler (date + time, or date + time
+   range). ICMs first asks how many (1–4), then a range block per ICM. */
+
+const CLOSE_PATHS = [
+  { id: "direct_start", label: "Direct Start", sched: "single" },
+  { id: "resume_review", label: "Resume / Portfolio Review", sched: "single" },
+  { id: "working_interview", label: "Working Interview", sched: "single" },
+  { id: "icm_pending", label: "ICM with Pending Start Date", sched: "range" },
+  { id: "icms", label: "ICMs", sched: "icms" }
+];
+const CLOSE_MAINS = ["direct_start", "working_interview", "icm_pending", "icms"];
+
+function closeNextState() {
+  const c = state.common.closing;
+  if (!c.close_next || typeof c.close_next !== "object") c.close_next = {};
+  const cn = c.close_next;
+  if (!Array.isArray(cn.selected)) cn.selected = [];
+  if (!cn.schedules || typeof cn.schedules !== "object") cn.schedules = {};
+  if (!Array.isArray(cn.icms)) cn.icms = [];
+  if (!(cn.icm_count >= 1 && cn.icm_count <= 4)) cn.icm_count = cn.icm_count || null;
+  return cn;
+}
+
+function toggleClosePath(cn, id, on) {
+  if (!on) {
+    cn.selected = cn.selected.filter(x => x !== id);
+    if (id === "icms") { cn.icm_count = null; cn.icms = []; }
+    return;
+  }
+  if (CLOSE_MAINS.includes(id)) {
+    /* a main is exclusive with the other mains — drop any main already on,
+       but leave Resume/Portfolio Review (not a main) in place */
+    cn.selected = cn.selected.filter(x => !CLOSE_MAINS.includes(x));
+    cn.icm_count = null; cn.icms = [];   /* clear any prior ICM schedule */
+  }
+  if (!cn.selected.includes(id)) cn.selected.push(id);
+}
+
+function renderCloseNext(container) {
+  const host = el("div", "close-next");
+  container.appendChild(host);
+  drawCloseNext(host);
+}
+
+function drawCloseNext(host) {
+  host.innerHTML = "";
+  const cn = closeNextState();
+  host.appendChild(el("h3", "subhead", "🤝 Close To The Next Steps"));
+  host.appendChild(el("p", "subtitle", "How are we closing this? Pick the path, then lock in the date and time for each step."));
+
+  const group = el("div", "chip-group");
+  CLOSE_PATHS.forEach(p => {
+    const lab = el("label", "chip");
+    const input = el("input");
+    input.type = "checkbox";
+    input.checked = cn.selected.includes(p.id);
+    input.addEventListener("change", () => {
+      toggleClosePath(cn, p.id, input.checked);
+      saveState();
+      drawCloseNext(host);
+    });
+    lab.appendChild(input);
+    lab.appendChild(el("span", null, esc(p.label)));
+    group.appendChild(lab);
+  });
+  host.appendChild(group);
+
+  /* schedulers, in canonical order */
+  CLOSE_PATHS.forEach(p => {
+    if (!cn.selected.includes(p.id)) return;
+    if (p.sched === "icms") host.appendChild(buildIcmsBlock(cn, host));
+    else host.appendChild(buildScheduler(p, cn));
+  });
+}
+
+function dateField(obj, key) {
+  const wrap = el("label", "sched-field");
+  wrap.appendChild(el("span", "sched-field-lab", "Date"));
+  const inp = el("input");
+  inp.type = "date";
+  inp.value = obj[key] || "";
+  inp.addEventListener("change", () => { obj[key] = inp.value; saveState(); });
+  wrap.appendChild(inp);
+  return wrap;
+}
+
+function timeField(obj, key, labelTxt) {
+  const wrap = el("label", "sched-field");
+  wrap.appendChild(el("span", "sched-field-lab", labelTxt));
+  const inp = el("input");
+  inp.type = "time";
+  inp.value = obj[key] || "";
+  inp.addEventListener("change", () => { obj[key] = inp.value; saveState(); });
+  wrap.appendChild(inp);
+  return wrap;
+}
+
+function buildScheduler(p, cn) {
+  const sc = cn.schedules[p.id] || (cn.schedules[p.id] = {});
+  const row = el("div", "sched-row");
+  row.appendChild(el("div", "sched-label", esc(p.label)));
+  const controls = el("div", "sched-controls");
+  controls.appendChild(dateField(sc, "date"));
+  if (p.sched === "range") {
+    controls.appendChild(timeField(sc, "start", "Start"));
+    controls.appendChild(el("span", "sched-dash", "–"));
+    controls.appendChild(timeField(sc, "end", "End"));
+  } else {
+    controls.appendChild(timeField(sc, "time", "Time"));
+  }
+  row.appendChild(controls);
+  return row;
+}
+
+function buildIcmsBlock(cn, host) {
+  const box = el("div", "sched-block");
+  const countRow = el("div", "sched-row");
+  countRow.appendChild(el("div", "sched-label", "ICMs — how many?"));
+  const counts = el("div", "chip-group");
+  [1, 2, 3, 4].forEach(n => {
+    const lab = el("label", "chip");
+    const input = el("input");
+    input.type = "radio";
+    input.name = "icm_count";
+    input.checked = cn.icm_count === n;
+    input.addEventListener("change", () => {
+      cn.icm_count = n;
+      cn.icms = cn.icms.slice(0, n);
+      while (cn.icms.length < n) cn.icms.push({ date: "", start: "", end: "" });
+      saveState();
+      drawCloseNext(host);
+    });
+    lab.appendChild(input);
+    lab.appendChild(el("span", null, String(n)));
+    counts.appendChild(lab);
+  });
+  countRow.appendChild(counts);
+  box.appendChild(countRow);
+
+  if (cn.icm_count) {
+    for (let i = 0; i < cn.icm_count; i++) {
+      const sc = cn.icms[i] || (cn.icms[i] = { date: "", start: "", end: "" });
+      const row = el("div", "sched-row indented");
+      row.appendChild(el("div", "sched-label", "ICM #" + (i + 1)));
+      const controls = el("div", "sched-controls");
+      controls.appendChild(dateField(sc, "date"));
+      controls.appendChild(timeField(sc, "start", "Start"));
+      controls.appendChild(el("span", "sched-dash", "–"));
+      controls.appendChild(timeField(sc, "end", "End"));
+      row.appendChild(controls);
+      box.appendChild(row);
+    }
+  }
+  return box;
+}
+
+/* ---- Close-plan formatting for exports ---- */
+
+function fmtDate(d) {
+  if (!d) return "";
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d);
+  if (!m) return d;
+  return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString(undefined,
+    { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+}
+function fmtTime(t) {
+  if (!t) return "";
+  const m = /^(\d{1,2}):(\d{2})/.exec(t);
+  if (!m) return t;
+  let h = +m[1]; const ap = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  return h + ":" + m[2] + " " + ap;
+}
+function fmtWhen(sc, kind) {
+  const date = fmtDate(sc.date);
+  if (kind === "range") {
+    const range = [fmtTime(sc.start), fmtTime(sc.end)].filter(Boolean).join("–");
+    return [date, range].filter(Boolean).join(", ");
+  }
+  return [date, fmtTime(sc.time)].filter(Boolean).join(" at ");
+}
+
+/* Returns [{label,value}] lines for the close plan, or [] if nothing set. */
+function closeNextLines() {
+  const c = state.common.closing;
+  const cn = c && c.close_next;
+  if (!cn || !Array.isArray(cn.selected) || !cn.selected.length) return [];
+  const lines = [];
+  CLOSE_PATHS.forEach(p => {
+    if (!cn.selected.includes(p.id)) return;
+    if (p.sched === "icms") {
+      const n = cn.icm_count || 0;
+      lines.push({ label: "ICMs", value: n ? n + " scheduled" : "count not set", id: "close_icms" });
+      (cn.icms || []).slice(0, n).forEach((sc, i) => {
+        const when = fmtWhen(sc, "range");
+        lines.push({ label: "  ICM #" + (i + 1), value: when || "date/time not set", id: "close_icm_" + i });
+      });
+    } else {
+      const sc = (cn.schedules || {})[p.id] || {};
+      const when = fmtWhen(sc, p.sched);
+      lines.push({ label: p.label, value: when || "date/time not set", id: "close_" + p.id });
+    }
+  });
+  return lines;
 }
 
 function renderConfigLike(main, def) {
@@ -886,6 +1095,7 @@ function collectSummary() {
 
   const team = collectConfigSection(configStepDef("team")); if (team) sections.push(team);
   const closing = collectConfigSection(configStepDef("closing")); if (closing) sections.push(closing);
+  const closeLines = closeNextLines(); if (closeLines.length) sections.push({ title: "Close To The Next Steps", lines: closeLines });
 
   /* AI analysis → free-text section */
   if (state.aiAnalysis && (state.aiAnalysis.text || "").trim())
@@ -931,7 +1141,7 @@ const CANDIDATE_EXCLUDE_IDS = new Set([
   "feedback_turnaround", "next_steps",                 /* rep↔client agreements */
   "recruiter_profile"                                  /* recruiter targeting notes */
 ]);
-const CANDIDATE_EXCLUDE_SECTIONS = new Set(["AI Analysis", "Live Notes", "Job Description / Pre-Meeting Info"]);
+const CANDIDATE_EXCLUDE_SECTIONS = new Set(["AI Analysis", "Live Notes", "Job Description / Pre-Meeting Info", "Close To The Next Steps"]);
 
 function collectCandidateSummary() {
   return collectSummary()
@@ -1126,7 +1336,8 @@ function renderReviewStep(main) {
     { ok: musts.length >= 1 && musts.length <= 3, text: "1–3 must-have focus areas selected" },
     { ok: total === 100, text: "Time allocation totals 100%" },
     { ok: !!(rs && (rs.success.success_6_12 || "").trim()), text: "6–12 month success definition captured" },
-    { ok: !!(state.common.closing.interview_process || "").trim(), text: "Interview process captured" }
+    { ok: !!(state.common.closing.interview_process || "").trim(), text: "Interview process captured" },
+    { ok: closeNextLines().length > 0, text: "Close-to-next-steps path selected" }
   ];
   const list = el("div", "checklist");
   checks.forEach(c => list.appendChild(el("div", "check " + (c.ok ? "ok" : "miss"), (c.ok ? "✅ " : "⬜ ") + esc(c.text))));

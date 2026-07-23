@@ -422,6 +422,28 @@ textarea { resize: vertical; }
 .seg span:hover { border-color: var(--accent); }
 .seg-group.compact .seg span { padding: 5px 10px; font-size: 12.5px; }
 
+/* Close To The Next Steps scheduler */
+.close-next { margin-top: 8px; }
+.close-next .chip-group { margin-bottom: 6px; }
+.sched-block { display: flex; flex-direction: column; gap: 12px; }
+.sched-row {
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 16px;
+  padding: 12px 14px; margin-top: 12px;
+  background: var(--accent-soft); border: 1px solid var(--tip-line); border-radius: 10px;
+}
+.sched-block .sched-row { margin-top: 0; }
+.sched-row.indented { margin-left: 18px; background: var(--panel); }
+.sched-label { font-weight: 700; font-size: 14px; flex: 1 1 100%; }
+.sched-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; }
+.sched-field { display: flex; flex-direction: column; gap: 3px; }
+.sched-field-lab { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+.sched-field input {
+  font: inherit; font-size: 13.5px; color: var(--ink);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px;
+}
+.sched-field input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(36, 86, 214, .15); }
+.sched-dash { padding-bottom: 8px; font-weight: 700; color: var(--muted); }
+
 /* chips (multi-select) */
 .chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { position: relative; }
