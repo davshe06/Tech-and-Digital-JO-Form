@@ -466,6 +466,12 @@ textarea { resize: vertical; }
 }
 .chip span:hover { border-color: var(--accent); }
 
+/* ICM count chips: 1–2 green (easy close), 3–4 light red (long process) */
+.chip.icm-count.good span { border-color: #46b06a; color: #2f8f52; background: rgba(70, 176, 106, .1); }
+.chip.icm-count.good input:checked + span { background: #46b06a; border-color: #46b06a; color: #fff; }
+.chip.icm-count.warn span { border-color: #e58a80; color: #c0473b; background: rgba(214, 60, 46, .1); }
+.chip.icm-count.warn input:checked + span { background: #e0645a; border-color: #e0645a; color: #fff; }
+
 /* user-added chip values */
 .chip.custom input:checked + span {
   background: var(--warn-bg);

@@ -615,7 +615,9 @@ function buildIcmsBlock(cn, host) {
   countRow.appendChild(el("div", "sched-label", "ICMs — how many?"));
   const counts = el("div", "chip-group");
   [1, 2, 3, 4].forEach(n => {
-    const lab = el("label", "chip");
+    /* 1–2 ICMs read as an easy close (green); 3–4 signal a drawn-out
+       process worth flagging (light red) */
+    const lab = el("label", "chip icm-count " + (n <= 2 ? "good" : "warn"));
     const input = el("input");
     input.type = "radio";
     input.name = "icm_count";
